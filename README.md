@@ -9,22 +9,22 @@ Built for macOS 26 with the Liquid Glass design language. Small, medium, and lar
 ## Install
 
 ```sh
-brew install malekalbdoor/tap/ayah
-xattr -r -d com.apple.quarantine /Applications/Ayah.app
-open /Applications/Ayah.app
+brew install --cask malekalbdoor/tap/ayah
 ```
-
-That second line is required, and the section below explains exactly why.
 
 Then right-click your desktop, choose **Edit Widgets**, search for **Ayah**, and drag **Verse of the Day** where you want it.
 
-### Why the `xattr` line is needed
+Prefer not to use Homebrew? Download the zip from [Releases](https://github.com/MalekAlbdoor/ayah/releases/latest), move `Ayah.app` to `/Applications`, then run this once so macOS will open it:
 
-Ayah is not notarized by Apple. Notarizing requires a paid Apple Developer membership, and this is a free app. macOS attaches a quarantine flag to anything downloaded, and refuses to open un-notarized quarantined apps, so that one command clears the flag for this app.
+```sh
+xattr -r -d com.apple.quarantine /Applications/Ayah.app
+```
 
-Homebrew used to offer `--no-quarantine` for exactly this, but [removed it in Homebrew 6 with no replacement](https://github.com/Homebrew/brew/issues/20755), so the flag has to be cleared afterwards instead.
+### What you are trusting
 
-You are right to be wary of any instruction that disables a security check, so here is exactly what you are trusting:
+Ayah is not notarized by Apple. Notarizing requires a paid Apple Developer membership, and this is a free app. macOS attaches a quarantine flag to anything downloaded and refuses to open un-notarized quarantined apps, so that flag has to be cleared once. The cask does it for you during install and prints a note saying so, which is why the Homebrew install is a single command. (Homebrew used to offer `--no-quarantine` for this, but [removed it in Homebrew 6 with no replacement](https://github.com/Homebrew/brew/issues/20755).)
+
+Clearing a security check on your behalf is not something to wave through, so here is exactly what you are trusting:
 
 - **Every line of source is in this repository**, and the app is built from it with `xcodebuild`. Nothing is minified or obfuscated.
 - **It cannot reach the network.** Neither the app nor the widget requests the network entitlement, so the sandbox denies outbound connections at the OS level, not by promise. All 365 verses are bundled offline in `AyahWidget/Verses.json`.
@@ -32,7 +32,7 @@ You are right to be wary of any instruction that disables a security check, so h
 - **It collects nothing.** There is no analytics, no telemetry, and no account.
 - The only thing it opens is a `quran.com` link in your default browser, when you click the widget.
 
-If you would rather not run that command, [build it from source](#building-from-source). Quarantine never applies to something you compiled yourself.
+If you would rather not rely on any of that, [build it from source](#building-from-source). Quarantine never applies to something you compiled yourself.
 
 ## Options
 

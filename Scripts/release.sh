@@ -87,7 +87,7 @@ if [[ "$PUBLISH" == "1" ]]; then
     --notes "Install with:
 
 \`\`\`sh
-brew install --no-quarantine malekalbdoor/tap/ayah
+brew install --cask malekalbdoor/tap/ayah
 \`\`\`
 
 sha256: \`$SHA\`" \
