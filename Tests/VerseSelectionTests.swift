@@ -58,6 +58,67 @@ final class VerseSelectionTests: XCTestCase {
         XCTAssertEqual(seen.count, verses.count, "one full cycle should visit every verse exactly once")
     }
 
+    func testReadingOrderIsAPermutation() {
+        let order = VerseStore.readingOrder(count: verses.count)
+        XCTAssertEqual(order.count, verses.count)
+        XCTAssertEqual(Set(order), Set(0..<verses.count), "every verse index must appear exactly once")
+    }
+
+    func testReadingOrderIsStable() {
+        XCTAssertEqual(
+            VerseStore.readingOrder(count: verses.count),
+            VerseStore.readingOrder(count: verses.count),
+            "the shuffle must be reproducible, not random per run"
+        )
+    }
+
+    func testReadingOrderHandlesDegenerateCounts() {
+        XCTAssertEqual(VerseStore.readingOrder(count: 0), [])
+        XCTAssertEqual(VerseStore.readingOrder(count: 1), [0])
+    }
+
+    func testConsecutiveDaysDoNotClusterBySurah() {
+        // Stored in mushaf order, walking the array directly would show long
+        // runs from the same surah. The shuffle should break those up.
+        let calendar = Calendar.current
+        let start = calendar.date(from: DateComponents(year: 2026, month: 3, day: 1))!
+        var sameSurahAsPrevious = 0
+        var previous: Int?
+        for offset in 0..<verses.count {
+            let day = calendar.date(byAdding: .day, value: offset, to: start)!
+            let surah = VerseStore.verse(for: day, in: verses).surah
+            if surah == previous { sameSurahAsPrevious += 1 }
+            previous = surah
+        }
+        // A handful of neighbouring pairs is normal in any shuffle; the mushaf
+        // ordering produces dozens.
+        XCTAssertLessThan(
+            sameSurahAsPrevious,
+            verses.count / 10,
+            "consecutive days should rarely repeat a surah"
+        )
+    }
+
+    func testAnyWindowOfOneCycleHasNoRepeats() {
+        // Stronger than covering one aligned cycle: because the same permutation
+        // repeats, ANY run of `count` consecutive days must be repeat-free.
+        let calendar = Calendar.current
+        let base = calendar.date(from: DateComponents(year: 2026, month: 3, day: 1))!
+        for startOffset in [0, 1, 7, 43, 200] {
+            let start = calendar.date(byAdding: .day, value: startOffset, to: base)!
+            var seen = Set<String>()
+            for offset in 0..<verses.count {
+                let day = calendar.date(byAdding: .day, value: offset, to: start)!
+                seen.insert(VerseStore.verse(for: day, in: verses).reference)
+            }
+            XCTAssertEqual(
+                seen.count,
+                verses.count,
+                "a \(verses.count)-day window starting at +\(startOffset) repeated a verse"
+            )
+        }
+    }
+
     func testDatesBeforeEpochStillSelectSafely() {
         let old = Date(timeIntervalSince1970: 0)
         XCTAssertTrue(verses.contains(VerseStore.verse(for: old, in: verses)))

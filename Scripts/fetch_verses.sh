@@ -1,10 +1,10 @@
 #!/bin/zsh
 # Fetches Uthmani Arabic + Saheeh International English for every reference in
-# verse_refs.txt and writes QuranVerseWidget/Verses.json. Run once, commit the JSON.
+# verse_refs.txt and writes AyahWidget/Verses.json. Run once, commit the JSON.
 set -euo pipefail
 cd "$(dirname "$0")"
 
-OUT="../QuranVerseWidget/Verses.json"
+OUT="../AyahWidget/Verses.json"
 TMP=$(mktemp)
 trap 'rm -f "$TMP"' EXIT
 

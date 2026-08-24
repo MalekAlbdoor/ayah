@@ -67,6 +67,31 @@ enum RefreshInterval: String, CaseIterable {
     }
 }
 
+// SplitMix64: a small, fully specified PRNG. Written out here so the verse
+// order is reproducible across Swift versions, platforms, and machines.
+private struct SplitMix64 {
+    private var state: UInt64
+
+    init(seed: UInt64) { state = seed }
+
+    mutating func next() -> UInt64 {
+        state = state &+ 0x9E37_79B9_7F4A_7C15
+        var z = state
+        z = (z ^ (z >> 30)) &* 0xBF58_476D_1CE4_E5B9
+        z = (z ^ (z >> 27)) &* 0x94D0_49BB_1331_11EB
+        return z ^ (z >> 31)
+    }
+
+    // Rejection sampling, so every value below the bound is equally likely.
+    mutating func next(upperBound: UInt64) -> UInt64 {
+        precondition(upperBound > 0)
+        let limit = UInt64.max - (UInt64.max % upperBound)
+        var value = next()
+        while value >= limit { value = next() }
+        return value % upperBound
+    }
+}
+
 enum VerseStore {
     private final class BundleLocator {}
 
@@ -112,8 +137,26 @@ enum VerseStore {
     ) -> Verse {
         guard !verses.isEmpty else { return fallback }
         let period = periodIndex(for: date, every: interval, calendar: calendar) + offset
-        let index = ((period % verses.count) + verses.count) % verses.count
-        return verses[index]
+        let position = ((period % verses.count) + verses.count) % verses.count
+        return verses[readingOrder(count: verses.count)[position]]
+    }
+
+    // Verses.json is stored in mushaf order, so walking it directly would show
+    // several verses from the same surah on consecutive days. This spreads them
+    // out with a fixed seeded shuffle: still fully deterministic and stateless,
+    // and because the same permutation repeats every cycle, any run of `count`
+    // consecutive periods shows every verse exactly once.
+    static func readingOrder(count: Int) -> [Int] {
+        guard count > 1 else { return Array(0..<max(count, 0)) }
+        var order = Array(0..<count)
+        var rng = SplitMix64(seed: 0x4179_6168_5665_7273)  // "AyahVers"
+        // Fisher-Yates, written out rather than using shuffle(using:) so the
+        // order can never shift under us when the standard library changes.
+        for i in stride(from: count - 1, to: 0, by: -1) {
+            let j = Int(rng.next(upperBound: UInt64(i + 1)))
+            order.swapAt(i, j)
+        }
+        return order
     }
 
     // Hour-based periods anchor to each day's local midnight so boundaries
