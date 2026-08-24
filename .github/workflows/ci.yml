@@ -1,0 +1,28 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: macos-26
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install XcodeGen
+        run: brew install xcodegen
+
+      - name: Generate project
+        run: xcodegen generate
+
+      - name: Test
+        run: |
+          xcodebuild -project Ayah.xcodeproj -scheme Ayah \
+            -configuration Debug -derivedDataPath build/ci-dd test
+
+      - name: Build Release
+        run: |
+          xcodebuild -project Ayah.xcodeproj -scheme Ayah \
+            -configuration Release -derivedDataPath build/ci-dd build

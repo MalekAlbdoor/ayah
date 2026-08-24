@@ -32,6 +32,8 @@ targets:
       properties:
         LSUIElement: true
         CFBundleDisplayName: Ayah
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
         CFBundleURLTypes:
           - CFBundleURLName: com.malek.ayah
             CFBundleURLSchemes: [ayah]
@@ -58,6 +60,8 @@ targets:
       path: AyahWidget/Info.plist
       properties:
         CFBundleDisplayName: Ayah
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
         EXAppExtensionAttributes:
           EXExtensionPointIdentifier: com.apple.widgetkit-extension
     entitlements:
