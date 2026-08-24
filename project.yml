@@ -1,4 +1,4 @@
-name: QuranVerse
+name: Ayah
 options:
   bundleIdPrefix: com.malek
   deploymentTarget:
@@ -11,46 +11,50 @@ settings:
     CODE_SIGN_IDENTITY: "-"
     DEVELOPMENT_TEAM: ""
 targets:
-  QuranVerse:
+  Ayah:
     type: application
     platform: macOS
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.malek.quranverse
+        PRODUCT_BUNDLE_IDENTIFIER: com.malek.ayah
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
     sources:
-      - QuranVerse
+      - Ayah
     info:
-      path: QuranVerse/Info.plist
+      path: Ayah/Info.plist
       properties:
         LSUIElement: true
-        CFBundleDisplayName: QuranVerse
+        CFBundleDisplayName: Ayah
         CFBundleURLTypes:
-          - CFBundleURLName: com.malek.quranverse
-            CFBundleURLSchemes: [quranverse]
+          - CFBundleURLName: com.malek.ayah
+            CFBundleURLSchemes: [ayah]
     entitlements:
-      path: QuranVerse/QuranVerse.entitlements
+      path: Ayah/Ayah.entitlements
       properties:
         com.apple.security.app-sandbox: true
     dependencies:
-      - target: QuranVerseWidget
+      - target: AyahWidget
         embed: true
         codeSign: true
-  QuranVerseWidget:
+  AyahWidget:
     type: extensionkit-extension
     platform: macOS
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.malek.quranverse.widget
+        PRODUCT_BUNDLE_IDENTIFIER: com.malek.ayah.widget
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
     sources:
-      - QuranVerseWidget
+      - AyahWidget
+      - path: Ayah/Assets.xcassets
+        buildPhase: resources
     info:
-      path: QuranVerseWidget/Info.plist
+      path: AyahWidget/Info.plist
       properties:
-        CFBundleDisplayName: Quran Verse
+        CFBundleDisplayName: Ayah
         EXAppExtensionAttributes:
           EXExtensionPointIdentifier: com.apple.widgetkit-extension
     entitlements:
-      path: QuranVerseWidget/QuranVerseWidget.entitlements
+      path: AyahWidget/AyahWidget.entitlements
       properties:
         com.apple.security.app-sandbox: true
   VerseSelectionTests:
@@ -61,14 +65,14 @@ targets:
         GENERATE_INFOPLIST_FILE: YES
     sources:
       - Tests
-      - QuranVerseWidget/VerseStore.swift
-      - path: QuranVerseWidget/Verses.json
+      - AyahWidget/VerseStore.swift
+      - path: AyahWidget/Verses.json
         buildPhase: resources
 schemes:
-  QuranVerse:
+  Ayah:
     build:
       targets:
-        QuranVerse: all
+        Ayah: all
         VerseSelectionTests: [test]
     run:
       config: Debug

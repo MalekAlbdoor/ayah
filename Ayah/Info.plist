@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>QuranVerse</string>
+	<string>Ayah</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -22,10 +22,10 @@
 	<array>
 		<dict>
 			<key>CFBundleURLName</key>
-			<string>com.malek.quranverse</string>
+			<string>com.malek.ayah</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>quranverse</string>
+				<string>ayah</string>
 			</array>
 		</dict>
 	</array>

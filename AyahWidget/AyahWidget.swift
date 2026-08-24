@@ -2,15 +2,19 @@ import WidgetKit
 import SwiftUI
 
 @main
-struct QuranVerseWidgetBundle: WidgetBundle {
+struct AyahWidgetBundle: WidgetBundle {
     var body: some Widget {
-        QuranVerseWidget()
+        AyahWidget()
     }
 }
 
-struct QuranVerseWidget: Widget {
+struct AyahWidget: Widget {
     var body: some WidgetConfiguration {
-        StaticConfiguration(kind: "QuranVerseDaily", provider: Provider()) { entry in
+        AppIntentConfiguration(
+            kind: "AyahDaily",
+            intent: AyahConfigIntent.self,
+            provider: Provider()
+        ) { entry in
             VerseView(entry: entry)
         }
         .configurationDisplayName("Verse of the Day")

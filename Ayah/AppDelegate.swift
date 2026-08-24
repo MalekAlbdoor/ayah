@@ -1,7 +1,7 @@
 import AppKit
 
 // Invisible relay: the widget can only launch its containing app, so this app
-// translates quranverse:// URLs into quran.com links, opens the browser, and quits.
+// translates ayah:// URLs into quran.com links, opens the browser, and quits.
 final class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationWillFinishLaunching(_ notification: Notification) {
         NSAppleEventManager.shared().setEventHandler(
@@ -23,7 +23,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     private func handle(_ url: URL) {
-        guard url.scheme == "quranverse",
+        guard url.scheme == "ayah",
               let components = URLComponents(url: url, resolvingAgainstBaseURL: false) else { return }
 
         var surah: Int?

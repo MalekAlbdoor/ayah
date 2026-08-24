@@ -23,7 +23,7 @@ struct Verse: Codable, Equatable {
     }
 
     var widgetLinkURL: URL {
-        URL(string: "quranverse://open?surah=\(surah)&ayahStart=\(ayahStart)&ayahEnd=\(ayahEnd)")!
+        URL(string: "ayah://open?surah=\(surah)&ayahStart=\(ayahStart)&ayahEnd=\(ayahEnd)")!
     }
 }
 
