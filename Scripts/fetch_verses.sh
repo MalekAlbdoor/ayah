@@ -35,7 +35,11 @@ while IFS= read -r ref; do
       echo "Empty text for ${surah}:${a}" >&2
       exit 1
     fi
-    arabic+="${arabic:+ }${ar}"
+    # End-of-ayah medallion: the KFGQPC HAFS font encloses a bare run of
+    # Arabic-Indic digits in the ornamental circle on its own; adding U+06DD
+    # produces a second, empty circle, so only the digits are appended.
+    hindi=$(jq -rn --arg n "$a" '$n | split("") | map({"0":"٠","1":"١","2":"٢","3":"٣","4":"٤","5":"٥","6":"٦","7":"٧","8":"٨","9":"٩"}[.]) | join("")')
+    arabic+="${arabic:+ }${ar} ${hindi}"
     english+="${english:+ }${en}"
     sleep 0.3
   done

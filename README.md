@@ -61,3 +61,7 @@ Scripts/fetch_verses.sh
 ```
 
 Data comes from [alquran.cloud](https://alquran.cloud) (`quran-uthmani` and `en.sahih` editions). Re-run once and commit the updated `Verses.json`.
+
+## Arabic typography
+
+The widget bundles the KFGQPC Uthmanic Script HAFS font from the King Fahd Quran Printing Complex (`QuranVerseWidget/Fonts/UthmanicHafs.otf`), the same Madinah Mushaf face quran.com uses. It is registered at runtime via CTFontManager, no plist keys needed. The ayah-end medallion comes from the font itself: it encloses a trailing run of Arabic-Indic digits in the ornamental circle (do not prepend U+06DD with this font version; that draws an extra empty circle).

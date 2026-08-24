@@ -19,8 +19,8 @@ struct VerseView: View {
             Spacer(minLength: 0)
 
             Text(entry.verse.arabic)
-                .font(.system(size: isLarge ? 24 : 19, weight: .medium))
-                .lineSpacing(isLarge ? 8 : 5)
+                .font(QuranFont.arabic(size: isLarge ? 25 : 20))
+                .lineSpacing(isLarge ? 4 : 2)
                 .lineLimit(isLarge ? 6 : 3)
                 .minimumScaleFactor(0.85)
                 .truncationMode(.tail)
@@ -38,9 +38,40 @@ struct VerseView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
         }
         .containerBackground(for: .widget) {
-            Rectangle().fill(.regularMaterial)
+            GlassBackground()
         }
         .widgetURL(entry.verse.widgetLinkURL)
+    }
+}
+
+// Widgets render off-screen, so blur materials cannot sample the wallpaper and
+// collapse to flat colors. This builds the glass look from translucency instead:
+// the wallpaper shows through a soft white wash with a lit rim.
+private struct GlassBackground: View {
+    @Environment(\.colorScheme) private var colorScheme
+
+    var body: some View {
+        ZStack {
+            LinearGradient(
+                colors: colorScheme == .dark
+                    ? [Color.white.opacity(0.18), Color.white.opacity(0.06)]
+                    : [Color.white.opacity(0.60), Color.white.opacity(0.30)],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+            ContainerRelativeShape()
+                .strokeBorder(
+                    LinearGradient(
+                        colors: [
+                            Color.white.opacity(colorScheme == .dark ? 0.40 : 0.75),
+                            Color.white.opacity(0.05)
+                        ],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    ),
+                    lineWidth: 1
+                )
+        }
     }
 }
 
