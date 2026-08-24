@@ -1,5 +1,14 @@
 import Foundation
 
+// Length tier, computed at fetch time by Scripts/fetch_verses.sh and stored in
+// Verses.json. Never set by hand: a hand-written tier drifts from what actually
+// fits, a measured one cannot.
+enum VerseTier: Int, Codable, CaseIterable {
+    case short = 0
+    case medium = 1
+    case long = 2
+}
+
 struct Verse: Codable, Equatable {
     let surah: Int
     let ayahStart: Int
@@ -7,6 +16,42 @@ struct Verse: Codable, Equatable {
     let surahName: String
     let arabic: String
     let english: String
+    // Optional so a version 1 Verses.json still decodes. A bundled file that
+    // predates tiering degrades to short, which every widget size can render,
+    // rather than failing to load and dropping the user to the fallback verse.
+    let tierRaw: Int?
+    let theme: String?
+    let source: String?
+
+    enum CodingKeys: String, CodingKey {
+        case surah, ayahStart, ayahEnd, surahName, arabic, english
+        case tierRaw = "tier"
+        case theme, source
+    }
+
+    var tier: VerseTier { VerseTier(rawValue: tierRaw ?? 0) ?? .short }
+
+    init(
+        surah: Int,
+        ayahStart: Int,
+        ayahEnd: Int,
+        surahName: String,
+        arabic: String,
+        english: String,
+        tierRaw: Int? = nil,
+        theme: String? = nil,
+        source: String? = nil
+    ) {
+        self.surah = surah
+        self.ayahStart = ayahStart
+        self.ayahEnd = ayahEnd
+        self.surahName = surahName
+        self.arabic = arabic
+        self.english = english
+        self.tierRaw = tierRaw
+        self.theme = theme
+        self.source = source
+    }
 
     var reference: String {
         ayahStart == ayahEnd

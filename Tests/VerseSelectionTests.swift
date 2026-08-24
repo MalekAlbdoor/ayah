@@ -19,6 +19,44 @@ final class VerseSelectionTests: XCTestCase {
         }
     }
 
+    // MARK: - Tier decoding
+
+    private func decodeVerse(_ json: String) throws -> Verse {
+        try JSONDecoder().decode(Verse.self, from: Data(json.utf8))
+    }
+
+    func testVerseWithoutTierDecodesAsShort() throws {
+        // A version 1 Verses.json has no tier key. It must still load, and it
+        // must land in the smallest pool rather than a pool it may not fit.
+        let verse = try decodeVerse("""
+        {"surah":112,"ayahStart":1,"ayahEnd":4,"surahName":"Al-Ikhlaas",
+         "arabic":"a","english":"b"}
+        """)
+        XCTAssertEqual(verse.tier, .short)
+        XCTAssertNil(verse.theme)
+        XCTAssertNil(verse.source)
+    }
+
+    func testVerseWithTierDecodesIt() throws {
+        let verse = try decodeVerse("""
+        {"surah":31,"ayahStart":12,"ayahEnd":19,"surahName":"Luqman",
+         "arabic":"a","english":"b","tier":2,"theme":"gratitude",
+         "source":"Luqman's counsel"}
+        """)
+        XCTAssertEqual(verse.tier, .long)
+        XCTAssertEqual(verse.theme, "gratitude")
+        XCTAssertEqual(verse.source, "Luqman's counsel")
+    }
+
+    func testUnknownTierValueFallsBackToShort() throws {
+        // Forward compatibility: a future tier 3 must not crash an old build.
+        let verse = try decodeVerse("""
+        {"surah":2,"ayahStart":1,"ayahEnd":1,"surahName":"Al-Baqara",
+         "arabic":"a","english":"b","tier":7}
+        """)
+        XCTAssertEqual(verse.tier, .short)
+    }
+
     func testSelectionIsDeterministic() {
         let date = Date(timeIntervalSince1970: 1_790_000_000)
         let first = VerseStore.verse(for: date, in: verses)
