@@ -92,6 +92,8 @@ struct VerseView: View {
         .containerBackground(for: .widget) {
             if let colors = entry.background.gradientColors {
                 ColorBackground(colors: colors)
+            } else if entry.background == .system {
+                SystemBackground()
             } else {
                 GlassBackground()
             }
@@ -155,32 +157,38 @@ private struct ColorBackground: View {
 
 // Widgets render off-screen, so blur materials cannot sample the wallpaper and
 // collapse to flat colors. This builds the glass look from translucency instead:
-// the wallpaper shows through a soft white wash with a lit rim.
+// the wallpaper shows through a faint white wash with a lit rim. The wash is
+// the same in both appearances (the content pins light text on top); a heavier
+// light-mode wash used to read as a plain white card.
 private struct GlassBackground: View {
-    @Environment(\.colorScheme) private var colorScheme
-
     var body: some View {
         ZStack {
             LinearGradient(
-                colors: colorScheme == .dark
-                    ? [Color.white.opacity(0.18), Color.white.opacity(0.06)]
-                    : [Color.white.opacity(0.60), Color.white.opacity(0.30)],
+                colors: [Color.white.opacity(0.18), Color.white.opacity(0.06)],
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
             )
             ContainerRelativeShape()
                 .strokeBorder(
                     LinearGradient(
-                        colors: [
-                            Color.white.opacity(colorScheme == .dark ? 0.40 : 0.75),
-                            Color.white.opacity(0.05)
-                        ],
+                        colors: [Color.white.opacity(0.40), Color.white.opacity(0.05)],
                         startPoint: .topLeading,
                         endPoint: .bottomTrailing
                     ),
                     lineWidth: 1
                 )
         }
+    }
+}
+
+// Follows the system appearance: a white card in light mode, charcoal in dark.
+private struct SystemBackground: View {
+    @Environment(\.colorScheme) private var colorScheme
+
+    var body: some View {
+        ColorBackground(
+            colors: (colorScheme == .dark ? WidgetBackground.charcoal : WidgetBackground.white).gradientColors!
+        )
     }
 }
 

@@ -42,12 +42,16 @@ final class ConfigMappingTests: XCTestCase {
     }
 
     func testEveryBackgroundKeepsTextLegible() {
-        for background in WidgetBackground.allCases where background != .liquidGlass {
+        for background in WidgetBackground.allCases where background != .liquidGlass && background != .system {
             XCTAssertNotNil(background.forcedColorScheme, "\(background) must pin a color scheme")
             XCTAssertNotNil(background.gradientColors, "\(background) must define colors")
         }
-        XCTAssertNil(WidgetBackground.liquidGlass.forcedColorScheme)
+        // Liquid Glass is a translucent smoke wash, so it pins light text.
+        XCTAssertEqual(WidgetBackground.liquidGlass.forcedColorScheme, .dark)
         XCTAssertNil(WidgetBackground.liquidGlass.gradientColors)
+        // System follows the appearance setting.
+        XCTAssertNil(WidgetBackground.system.forcedColorScheme)
+        XCTAssertNil(WidgetBackground.system.gradientColors)
     }
 
     func testEveryOptionTitleRoundTrips() {

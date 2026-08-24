@@ -5,6 +5,7 @@ import SwiftUI
 // enums cannot be used here).
 enum WidgetBackground: String, CaseIterable {
     case liquidGlass
+    case system
     case white
     case sand
     case ocean
@@ -15,6 +16,7 @@ enum WidgetBackground: String, CaseIterable {
 
     static let titles: [(WidgetBackground, String)] = [
         (.liquidGlass, "Liquid Glass"),
+        (.system, "System (light/dark)"),
         (.white, "White"),
         (.sand, "Sand"),
         (.ocean, "Ocean"),
@@ -39,11 +41,13 @@ enum WidgetBackground: String, CaseIterable {
     }
 
     // Fixed-color backgrounds pin the content's color scheme so text stays
-    // legible regardless of the system appearance. Liquid Glass adapts, so
-    // it returns nil and inherits the environment.
+    // legible regardless of the system appearance. Liquid Glass pins light
+    // text because its wash is translucent smoke over the wallpaper. System
+    // follows the appearance setting, so it inherits.
     var forcedColorScheme: ColorScheme? {
         switch self {
-        case .liquidGlass: return nil
+        case .system: return nil
+        case .liquidGlass: return .dark
         case .white, .sand: return .light
         case .ocean, .forest, .plum, .midnight, .charcoal: return .dark
         }
@@ -51,7 +55,7 @@ enum WidgetBackground: String, CaseIterable {
 
     var gradientColors: [Color]? {
         switch self {
-        case .liquidGlass:
+        case .liquidGlass, .system:
             return nil
         case .white:
             return [Color.white, Color(red: 0.93, green: 0.93, blue: 0.95)]
