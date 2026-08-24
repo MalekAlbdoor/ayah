@@ -1,4 +1,5 @@
 import Foundation
+import WidgetKit
 
 // Length tier, computed at fetch time by Scripts/fetch_verses.sh and stored in
 // Verses.json. Never set by hand: a hand-written tier drifts from what actually
@@ -21,6 +22,16 @@ enum VerseSizeClass: CaseIterable {
         case .small: return .short
         case .medium: return .medium
         case .large: return .long
+        }
+    }
+}
+
+extension VerseSizeClass {
+    init(family: WidgetFamily) {
+        switch family {
+        case .systemMedium: self = .medium
+        case .systemLarge: self = .large
+        default: self = .small
         }
     }
 }

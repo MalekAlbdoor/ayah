@@ -1,4 +1,5 @@
 import XCTest
+import WidgetKit
 
 final class VerseSelectionTests: XCTestCase {
     private var verses: [Verse] = []
@@ -131,6 +132,23 @@ final class VerseSelectionTests: XCTestCase {
             VerseStore.verse(for: Date(), sizeClass: .small, in: noShortVerses),
             VerseStore.fallback
         )
+    }
+
+    // MARK: - Family mapping
+
+    func testWidgetFamilyMapsToSizeClass() {
+        XCTAssertEqual(VerseSizeClass(family: .systemSmall), .small)
+        XCTAssertEqual(VerseSizeClass(family: .systemMedium), .medium)
+        XCTAssertEqual(VerseSizeClass(family: .systemLarge), .large)
+    }
+
+    func testUnsupportedFamilyFallsBackToSmall() {
+        // supportedFamilies lists only the three system sizes, but the
+        // initializer must be total. Small is the safe answer: its verses
+        // render at any size. Use .systemExtraLarge here, not one of the
+        // accessory families, which do not exist on macOS and would fail to
+        // compile.
+        XCTAssertEqual(VerseSizeClass(family: .systemExtraLarge), .small)
     }
 
     func testSelectionIsDeterministic() {
