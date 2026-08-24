@@ -23,10 +23,14 @@ REFS="${REFS_FILE:-verse_refs.txt}"
 # uses a bigger font over fewer lines. In both-languages mode a long English is
 # hidden rather than shrunk, so it does not constrain placement there.
 #
+# The long-tier cap of 800 pairs with the 700 Arabic cap: English runs about
+# 1.13 scalars per Arabic scalar, so 700 Arabic implies roughly 790 English.
+# It is reachable only because english-only on large now allows 18 lines.
+#
 # Measured 2026-08-24; see
 # docs/superpowers/specs/2026-08-24-verse-curation-and-size-tiers-design.md
 ARABIC_CAPS=(250 400 700)
-ENGLISH_CAPS=(300 300 550)
+ENGLISH_CAPS=(300 300 800)
 
 TMP=$(mktemp)
 trap 'rm -f "$TMP"' EXIT

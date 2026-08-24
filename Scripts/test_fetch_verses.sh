@@ -14,6 +14,10 @@ cat > "$WORK/refs.txt" <<'REFS'
 2:286 | mercy | closing du'a of al-Baqarah
 # long enough to exceed tier 0
 24:35 | light | the Verse of Light
+# a genuinely long passage: al-Hujurat on mockery and suspicion.
+# Measured: 638 Arabic scalars, 680 English. It clears the 700 Arabic cap but
+# breaks the old 550 English one, which is what makes it the test case.
+49:11-12 | character | hujurat-akhlaq
 REFS
 
 REFS_FILE="$WORK/refs.txt" OUT_FILE="$WORK/out.json" ./fetch_verses.sh
@@ -21,11 +25,15 @@ REFS_FILE="$WORK/refs.txt" OUT_FILE="$WORK/out.json" ./fetch_verses.sh
 fail() { echo "FAIL: $1" >&2; exit 1 }
 
 [[ $(jq -r '.version' "$WORK/out.json") == 2 ]] || fail "version is not 2"
-[[ $(jq '.verses | length' "$WORK/out.json") == 3 ]] || fail "expected 3 verses"
+[[ $(jq '.verses | length' "$WORK/out.json") == 4 ]] || fail "expected 4 verses"
 [[ $(jq -r '.verses[0].tier' "$WORK/out.json") == 0 ]] || fail "112:1-4 should be tier 0"
 [[ $(jq -r '.verses[0] | has("theme")' "$WORK/out.json") == false ]] || fail "absent theme should be omitted"
 [[ $(jq -r '.verses[1].theme' "$WORK/out.json") == "mercy" ]] || fail "theme not parsed"
 [[ $(jq -r '.verses[1].source' "$WORK/out.json") == "closing du'a of al-Baqarah" ]] || fail "source not parsed"
 [[ $(jq -r '.verses[2].tier' "$WORK/out.json") -gt 0 ]] || fail "24:35 should exceed tier 0"
+
+[[ $(jq -r '.verses[3].tier' "$WORK/out.json") == 2 ]] || fail "49:11-12 should be tier 2"
+[[ $(jq -r '.verses[3].english | length' "$WORK/out.json") -gt 550 ]] \
+    || fail "49:11-12 should exceed the old English cap, or it proves nothing"
 
 echo "PASS"

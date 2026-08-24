@@ -139,7 +139,12 @@ struct VerseView: View {
     private var englishLineLimit: Int {
         if entry.mode == .englishOnly {
             if isSmall { return 11 }
-            return isLarge ? 12 : 5
+            // 18 rather than 12 on large: the box has the height for it, and
+            // the line limit was what stopped a long passage's translation from
+            // fitting. Measured 2026-08-24 at 15.3pt, where 800 scalars needs
+            // 18 lines. Below that the English cap bound tier 2 to roughly 487
+            // Arabic scalars, barely above tier 1, making the long tier moot.
+            return isLarge ? 18 : 5
         }
         return isLarge ? 4 : 3
     }
