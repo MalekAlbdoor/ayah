@@ -9,17 +9,22 @@ Built for macOS 26 with the Liquid Glass design language. Small, medium, and lar
 ## Install
 
 ```sh
-brew install --no-quarantine malekalbdoor/tap/ayah
+brew install malekalbdoor/tap/ayah
+xattr -r -d com.apple.quarantine /Applications/Ayah.app
 open /Applications/Ayah.app
 ```
 
+That second line is required, and the section below explains exactly why.
+
 Then right-click your desktop, choose **Edit Widgets**, search for **Ayah**, and drag **Verse of the Day** where you want it.
 
-### Why `--no-quarantine`
+### Why the `xattr` line is needed
 
-Ayah is not notarized by Apple. Notarizing requires a paid Apple Developer membership, and this is a free app given away for free. Without notarization macOS quarantines the download and refuses to open it, so the flag tells Homebrew to skip attaching the quarantine flag it would otherwise add.
+Ayah is not notarized by Apple. Notarizing requires a paid Apple Developer membership, and this is a free app. macOS attaches a quarantine flag to anything downloaded, and refuses to open un-notarized quarantined apps, so that one command clears the flag for this app.
 
-You are right to be careful about that flag in general, so here is exactly what you are trusting:
+Homebrew used to offer `--no-quarantine` for exactly this, but [removed it in Homebrew 6 with no replacement](https://github.com/Homebrew/brew/issues/20755), so the flag has to be cleared afterwards instead.
+
+You are right to be wary of any instruction that disables a security check, so here is exactly what you are trusting:
 
 - **Every line of source is in this repository**, and the app is built from it with `xcodebuild`. Nothing is minified or obfuscated.
 - **It cannot reach the network.** Neither the app nor the widget requests the network entitlement, so the sandbox denies outbound connections at the OS level, not by promise. All 365 verses are bundled offline in `AyahWidget/Verses.json`.
@@ -27,7 +32,7 @@ You are right to be careful about that flag in general, so here is exactly what 
 - **It collects nothing.** There is no analytics, no telemetry, and no account.
 - The only thing it opens is a `quran.com` link in your default browser, when you click the widget.
 
-If you would rather not use the flag, [build it from source](#building-from-source). That skips quarantine entirely because you compiled it yourself.
+If you would rather not run that command, [build it from source](#building-from-source). Quarantine never applies to something you compiled yourself.
 
 ## Options
 
