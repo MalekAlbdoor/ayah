@@ -63,7 +63,7 @@ struct VerseView: View {
                     .font(englishFont)
                     .foregroundStyle(englishStyle)
                     .lineLimit(englishLineLimit)
-                    .minimumScaleFactor(entry.mode == .englishOnly ? 0.7 : 1)
+                    .minimumScaleFactor(entry.mode == .englishOnly ? 0.7 : (isLarge ? 1 : 0.65))
                     .truncationMode(.tail)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .layoutPriority(1)
@@ -97,7 +97,7 @@ struct VerseView: View {
         if entry.mode == .englishOnly {
             return isLarge ? 12 : 5
         }
-        return isLarge ? 4 : 2
+        return 4
     }
 }
 
