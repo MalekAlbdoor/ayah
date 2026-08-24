@@ -11,11 +11,22 @@ REFS="${REFS_FILE:-verse_refs.txt}"
 # unicodeScalars.count in the Swift tests. Swift's String.count counts grapheme
 # clusters and would disagree on Uthmani text, which is dense with combining
 # marks, so never compare against that.
-# Measured against the three widget families in both-languages mode; see
+#
+# Arabic and English get separate caps because they are drawn under different
+# constraints. Arabic decides placement: it is the one text every size renders.
+# The Arabic caps are the length at which each family still draws at roughly
+# 14pt, measured by laying the real Uthmani font out in each family's box:
+# 15pt/6 lines on small, 17pt/4 on medium, 24pt/9 on large.
+#
+# The English caps come from english-only mode, the only place a long
+# translation cannot be dropped. Medium's is no larger than small's because it
+# uses a bigger font over fewer lines. In both-languages mode a long English is
+# hidden rather than shrunk, so it does not constrain placement there.
+#
+# Measured 2026-08-24; see
 # docs/superpowers/specs/2026-08-24-verse-curation-and-size-tiers-design.md
-TIER0_MAX=200
-TIER1_MAX=350
-TIER2_MAX=700
+ARABIC_CAPS=(250 400 700)
+ENGLISH_CAPS=(300 300 550)
 
 TMP=$(mktemp)
 trap 'rm -f "$TMP"' EXIT
@@ -66,19 +77,19 @@ while IFS= read -r line; do
     sleep 0.3
   done
 
-  longest=${#arabic}
-  [[ ${#english} -gt $longest ]] && longest=${#english}
-  # Rejecting rather than clamping is deliberate: a passage too long for the
-  # large widget is a curation mistake, and filing it under tier 2 anyway would
-  # ship a verse nobody can read.
-  if [[ $longest -le $TIER0_MAX ]]; then
-    tier=0
-  elif [[ $longest -le $TIER1_MAX ]]; then
-    tier=1
-  elif [[ $longest -le $TIER2_MAX ]]; then
-    tier=2
-  else
-    echo "${ref} is ${longest} scalars, past the tier 2 cap of ${TIER2_MAX}" >&2
+  # Lowest tier whose caps BOTH texts clear. Rejecting rather than clamping is
+  # deliberate: a passage too long for the large widget is a curation mistake,
+  # and filing it under tier 2 anyway would ship a verse nobody can read.
+  tier=""
+  for i in 1 2 3; do
+    if [[ ${#arabic} -le ${ARABIC_CAPS[$i]} && ${#english} -le ${ENGLISH_CAPS[$i]} ]]; then
+      tier=$((i - 1))
+      break
+    fi
+  done
+  if [[ -z "$tier" ]]; then
+    echo "${ref} does not fit any tier: arabic=${#arabic} english=${#english} scalars" \
+         "(caps ${ARABIC_CAPS[3]} / ${ENGLISH_CAPS[3]}). Shorten the range or drop it." >&2
     exit 1
   fi
 
