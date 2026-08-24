@@ -1,4 +1,7 @@
-# Curated verse references, one per line: surah:ayah or surah:start-end
+# Curated verse references, one per line:
+#   surah:ayah | theme | source
+#   surah:start-end | theme | source
+# Theme and source are optional; the reference alone is still a valid line.
 1:1-7
 2:2
 2:21

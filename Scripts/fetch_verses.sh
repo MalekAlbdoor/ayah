@@ -4,15 +4,37 @@
 set -euo pipefail
 cd "$(dirname "$0")"
 
-OUT="../AyahWidget/Verses.json"
+OUT="${OUT_FILE:-../AyahWidget/Verses.json}"
+REFS="${REFS_FILE:-verse_refs.txt}"
+
+# Tier caps in Unicode scalars. ${#var} counts scalars in zsh, matching
+# unicodeScalars.count in the Swift tests. Swift's String.count counts grapheme
+# clusters and would disagree on Uthmani text, which is dense with combining
+# marks, so never compare against that.
+# Measured against the three widget families in both-languages mode; see
+# docs/superpowers/specs/2026-08-24-verse-curation-and-size-tiers-design.md
+TIER0_MAX=200
+TIER1_MAX=350
+TIER2_MAX=700
+
 TMP=$(mktemp)
 trap 'rm -f "$TMP"' EXIT
 
-echo '{"version":1,"verses":[' > "$TMP"
+echo '{"version":2,"verses":[' > "$TMP"
 first=1
 
-while IFS= read -r ref; do
-  [[ -z "$ref" || "$ref" == \#* ]] && continue
+while IFS= read -r line; do
+  [[ -z "$line" || "$line" == \#* ]] && continue
+  ref=$(printf '%s' "${line%%|*}" | sed 's/[[:space:]]*$//')
+  theme=""
+  source_note=""
+  if [[ "$line" == *"|"* ]]; then
+    rest=${line#*|}
+    theme=$(printf '%s' "${rest%%|*}" | sed 's/^[[:space:]]*//; s/[[:space:]]*$//')
+    if [[ "$rest" == *"|"* ]]; then
+      source_note=$(printf '%s' "${rest#*|}" | sed 's/^[[:space:]]*//; s/[[:space:]]*$//')
+    fi
+  fi
   surah=${ref%%:*}
   ayahs=${ref##*:}
   start=${ayahs%%-*}
@@ -44,15 +66,36 @@ while IFS= read -r ref; do
     sleep 0.3
   done
 
+  longest=${#arabic}
+  [[ ${#english} -gt $longest ]] && longest=${#english}
+  # Rejecting rather than clamping is deliberate: a passage too long for the
+  # large widget is a curation mistake, and filing it under tier 2 anyway would
+  # ship a verse nobody can read.
+  if [[ $longest -le $TIER0_MAX ]]; then
+    tier=0
+  elif [[ $longest -le $TIER1_MAX ]]; then
+    tier=1
+  elif [[ $longest -le $TIER2_MAX ]]; then
+    tier=2
+  else
+    echo "${ref} is ${longest} scalars, past the tier 2 cap of ${TIER2_MAX}" >&2
+    exit 1
+  fi
+
   obj=$(jq -n \
     --argjson surah "$surah" --argjson s "$start" --argjson e "$end" \
+    --argjson tier "$tier" \
     --arg name "$name" --arg ar "$arabic" --arg en "$english" \
-    '{surah: $surah, ayahStart: $s, ayahEnd: $e, surahName: $name, arabic: $ar, english: $en}')
+    --arg theme "$theme" --arg source "$source_note" \
+    '{surah: $surah, ayahStart: $s, ayahEnd: $e, surahName: $name,
+      arabic: $ar, english: $en, tier: $tier}
+     + (if $theme == "" then {} else {theme: $theme} end)
+     + (if $source == "" then {} else {source: $source} end)')
   [[ $first == 1 ]] || echo ',' >> "$TMP"
   first=0
   printf '%s' "$obj" >> "$TMP"
-  echo "OK ${ref} (${name})" >&2
-done < verse_refs.txt
+  echo "OK ${ref} (${name}) tier=${tier}" >&2
+done < "$REFS"
 
 echo ']}' >> "$TMP"
 jq . "$TMP" > "$OUT"
