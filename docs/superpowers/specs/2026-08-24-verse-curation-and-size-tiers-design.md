@@ -94,21 +94,59 @@ than crashing.
 
 ## Tier calibration
 
-Thresholds are measured, not assumed. Render the longest candidate in each tier
-at each widget family in "both languages" mode, which is the tightest case, and
-place each cap where legibility actually breaks rather than where text stops
-fitting.
+Measured 2026-08-24, not estimated. Rather than eyeballing widgets on a desktop,
+the real Uthmani font was laid out with CoreText at each family's actual font
+size, line limit, box dimensions, and padding, and the largest scale that still
+fits was solved for. That is what SwiftUI's `minimumScaleFactor` settles on, so
+it answers the question directly and repeatably.
 
-Starting estimates, to be confirmed by that pass: 200 / 350 / 700 Arabic
-characters. Both the Arabic and the English must clear the tier's cap; the
-English cap is set in the same measurement pass.
+Legibility is judged by **rendered point size**, not by relative scale, because
+the three families start from different base sizes (15pt small, 17pt medium,
+24pt large). A 0.8 scale means 12pt on small but 19pt on large.
 
-Note that 200 for tier 0 is stricter than today's effective worst case of 456
-(24:35, the Verse of Light). Small-widget legibility therefore improves as a
-side effect of this work. Long-standing short entries do not move.
+**Arabic caps**, the length at which each family still draws at roughly 14pt:
 
-The thresholds live as named constants in one place, with a comment recording
-when they were measured and against which layout.
+| Tier | Smallest family showing it | Cap | Renders at |
+|---|---|---|---|
+| 0 | small (15pt, 6 lines) | 250 | 14.2pt |
+| 1 | medium (17pt, 4 lines) | 400 | 15.3pt |
+| 2 | large (24pt, 9 lines) | 700 | 16.8pt |
+
+A tier 2 verse on a large widget is therefore *more* legible than a tier 0 verse
+on a small one. The ladder trades length for room, not for readability.
+
+**English caps** come from english-only mode, the one place a long translation
+can be neither dropped nor hidden. Medium's cap is no larger than small's
+because it uses a bigger font over fewer lines:
+
+| Tier | Cap | Bound by |
+|---|---|---|
+| 0 | 300 | english-only on medium |
+| 1 | 300 | english-only on medium |
+| 2 | 550 | english-only on large |
+
+A verse takes the lowest tier whose caps *both* texts clear. Applied to the
+existing 365 this yields 352 / 5 / 8 across tiers 0 / 1 / 2, rejects nothing,
+and moves only five verses up on English length alone.
+
+### The long-verse decision, resolved
+
+The demotion is accepted. On a small widget 2:255 renders at 10.0pt and 2:286 at
+10.5pt; both read far better at medium or large, and the 250 cap lets the small
+pool carry verses that render at 14pt or more. No exemption list is added.
+
+### A defect found during calibration
+
+Large drew both texts unconditionally, which truncated the English on 17 of the
+365 curated verses, contradicting the rule that scripture is never cut
+mid-sentence. Medium already hid a long English rather than shrinking it; large
+now does the same, at a threshold of 390 (`arabic.count + english.count`)
+measured as the point past which one of the two texts truncates. Without this,
+tier 2 could not work at all: a 700-scalar passage carries roughly 800 scalars
+of English, and both cannot fit a 364x382 box at any readable size.
+
+The visibility rule moved from `VerseView` onto `Verse.showsEnglish(sizeClass:mode:)`
+so it can be tested without a widget host.
 
 ## Selection
 

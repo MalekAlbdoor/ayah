@@ -9,7 +9,7 @@ final class VerseSelectionTests: XCTestCase {
     }
 
     func testDataLoadsAndIsWellFormed() {
-        XCTAssertEqual(verses.count, 365, "one verse per day of the year")
+        XCTAssertGreaterThanOrEqual(verses.count, 365, "the curated set should not shrink")
         for verse in verses {
             XCTAssertFalse(verse.arabic.isEmpty, "\(verse.reference) has empty Arabic text")
             XCTAssertFalse(verse.english.isEmpty, "\(verse.reference) has empty English text")
@@ -213,24 +213,54 @@ final class VerseSelectionTests: XCTestCase {
     func testFullCycleCoversEveryVerse() {
         let calendar = Calendar.current
         let start = calendar.date(from: DateComponents(year: 2026, month: 3, day: 1))!
-        var seen = Set<String>()
-        for offset in 0..<verses.count {
-            let day = calendar.date(byAdding: .day, value: offset, to: start)!
-            let verse = VerseStore.verse(for: day, in: verses)
-            seen.insert(verse.reference)
+        for sizeClass in VerseSizeClass.allCases {
+            let pool = VerseStore.pool(for: sizeClass, in: verses)
+            var seen = Set<String>()
+            for offset in 0..<pool.count {
+                let day = calendar.date(byAdding: .day, value: offset, to: start)!
+                seen.insert(VerseStore.verse(for: day, sizeClass: sizeClass, in: verses).reference)
+            }
+            XCTAssertEqual(seen.count, pool.count,
+                           "\(sizeClass): one full cycle should visit every verse exactly once")
         }
-        XCTAssertEqual(seen.count, verses.count, "one full cycle should visit every verse exactly once")
     }
 
-    func testNoVerseIsUnreasonablyLongForAWidget() {
-        // 24:35, the Verse of Light, is the longest of the curated set and the
-        // worst case the small layout has to survive. Anything materially
-        // longer than that would not fit at a readable size.
+    func testEveryVerseFitsItsTier() {
+        // Caps are in Unicode scalars to match ${#var} in fetch_verses.sh.
+        // String.count counts graphemes and would disagree on Uthmani text.
+        // Arabic and English are capped separately; see the script for why.
+        let arabicCap: [VerseTier: Int] = [.short: 250, .medium: 400, .long: 700]
+        let englishCap: [VerseTier: Int] = [.short: 300, .medium: 300, .long: 550]
         for verse in verses {
             XCTAssertLessThanOrEqual(
-                verse.arabic.count, 500,
-                "\(verse.reference) is too long to render in a widget"
+                verse.arabic.unicodeScalars.count, arabicCap[verse.tier]!,
+                "\(verse.reference) Arabic exceeds the \(verse.tier) cap"
             )
+            XCTAssertLessThanOrEqual(
+                verse.english.unicodeScalars.count, englishCap[verse.tier]!,
+                "\(verse.reference) English exceeds the \(verse.tier) cap"
+            )
+        }
+    }
+
+    func testEveryPoolHasEnoughVerses() {
+        // Pools cycle at their own length rather than being padded to 365, but
+        // a pool small enough to repeat within a couple of months is a
+        // curation failure worth catching.
+        for sizeClass in VerseSizeClass.allCases {
+            XCTAssertGreaterThanOrEqual(
+                VerseStore.pool(for: sizeClass, in: verses).count, 60,
+                "\(sizeClass) pool is too small to avoid obvious repetition"
+            )
+        }
+    }
+
+    func testNoCuratedVerseTruncatesOnLarge() {
+        // Large hides the English past its threshold instead of cutting it.
+        // Anything still over the threshold with English shown would truncate.
+        for verse in verses where verse.showsEnglish(sizeClass: .large, mode: .both) {
+            XCTAssertLessThanOrEqual(verse.arabic.count + verse.english.count, 390,
+                                     "\(verse.reference) would truncate on large")
         }
     }
 
@@ -285,18 +315,22 @@ final class VerseSelectionTests: XCTestCase {
         // repeats, ANY run of `count` consecutive days must be repeat-free.
         let calendar = Calendar.current
         let base = calendar.date(from: DateComponents(year: 2026, month: 3, day: 1))!
-        for startOffset in [0, 1, 7, 43, 200] {
-            let start = calendar.date(byAdding: .day, value: startOffset, to: base)!
-            var seen = Set<String>()
-            for offset in 0..<verses.count {
-                let day = calendar.date(byAdding: .day, value: offset, to: start)!
-                seen.insert(VerseStore.verse(for: day, in: verses).reference)
+        for sizeClass in VerseSizeClass.allCases {
+            let pool = VerseStore.pool(for: sizeClass, in: verses)
+            for startOffset in [0, 1, 7, 43, 200] {
+                let start = calendar.date(byAdding: .day, value: startOffset, to: base)!
+                var seen = Set<String>()
+                for offset in 0..<pool.count {
+                    let day = calendar.date(byAdding: .day, value: offset, to: start)!
+                    seen.insert(
+                        VerseStore.verse(for: day, sizeClass: sizeClass, in: verses).reference
+                    )
+                }
+                XCTAssertEqual(
+                    seen.count, pool.count,
+                    "\(sizeClass): a \(pool.count)-day window at +\(startOffset) repeated a verse"
+                )
             }
-            XCTAssertEqual(
-                seen.count,
-                verses.count,
-                "a \(verses.count)-day window starting at +\(startOffset) repeated a verse"
-            )
         }
     }
 
@@ -310,10 +344,21 @@ final class VerseSelectionTests: XCTestCase {
     }
 
     func testManualOffsetAdvancesAndWraps() {
+        // The refresh button wraps at the size's POOL length, not the length of
+        // the whole curated list, now that each size draws from its own pool.
         let date = Date(timeIntervalSince1970: 1_790_000_000)
-        let base = VerseStore.verse(for: date, in: verses)
-        XCTAssertNotEqual(VerseStore.verse(for: date, offset: 1, in: verses), base)
-        XCTAssertEqual(VerseStore.verse(for: date, offset: verses.count, in: verses), base)
+        for sizeClass in VerseSizeClass.allCases {
+            let pool = VerseStore.pool(for: sizeClass, in: verses)
+            let base = VerseStore.verse(for: date, sizeClass: sizeClass, in: verses)
+            XCTAssertNotEqual(
+                VerseStore.verse(for: date, offset: 1, sizeClass: sizeClass, in: verses), base,
+                "\(sizeClass): one press should move to another verse"
+            )
+            XCTAssertEqual(
+                VerseStore.verse(for: date, offset: pool.count, sizeClass: sizeClass, in: verses), base,
+                "\(sizeClass): a full pool of presses should return to the start"
+            )
+        }
     }
 
     func testHourlyChangesEachHour() {

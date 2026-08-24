@@ -42,14 +42,18 @@ Right-click the widget and choose **Edit Widget**:
 - **New verse**: every hour, every 6 hours, every day, or every 3 days. Hour-based intervals change on wall-clock boundaries, so 6:00, 12:00, 18:00, and midnight.
 - **Background**: the default leaves the widget clear so your wallpaper shows through, or pick System (follows light and dark mode) or one of White, Sand, Ocean, Forest, Plum, Midnight, and Charcoal.
 
+Widget size affects which verses appear, not only how they are laid out. The large size can show passages several ayat long that would not be readable in the small one.
+
 There is a refresh button in the corner of the widget to jump to another verse immediately.
 
 ## How it works
 
-- 365 curated verses rotate deterministically by date, so every Mac shows the same verse on the same day, and the whole year passes before one repeats. The order is a fixed shuffle rather than mushaf order, so consecutive days do not all come from the same surah.
+- Verses rotate deterministically by date, so every Mac shows the same verse on the same day at the same widget size. The order is a fixed shuffle rather than mushaf order, so consecutive days do not all come from the same surah.
+- Widget size changes which verses can appear, not just the layout. Each verse is measured when the data is built and filed into a length tier; a small widget draws only from the short tier, medium adds the next, and large draws from all three. So a small and a large widget on the same desktop can show different verses on the same day, and each size cycles through its own pool before repeating.
 - The verse changes at local midnight, or on the interval you choose.
 - Widgets on macOS can only launch their containing app, so `Ayah.app` is a background agent. It receives `ayah://` URLs from the widget, opens the matching quran.com link, and quits. Opening the app directly shows a window explaining how to add the widget.
 - On the desktop, macOS composites every widget over its own frosted platter that samples your wallpaper. The default background paints nothing on top of it, so the wallpaper shows through. The other backgrounds paint over that platter as solid cards.
+- A long verse hides the English so the Arabic stays readable, rather than shrinking both or cutting either one off. The small size shows Arabic alone whenever both are switched on, since it has room for one language at most.
 
 ## Building from source
 
