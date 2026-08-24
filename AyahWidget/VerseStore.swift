@@ -9,6 +9,22 @@ enum VerseTier: Int, Codable, CaseIterable {
     case long = 2
 }
 
+// Which tiers a given widget size may draw from. Pools nest, so a large widget
+// sees short verses too; it simply has more to choose from.
+enum VerseSizeClass: CaseIterable {
+    case small
+    case medium
+    case large
+
+    var maxTier: VerseTier {
+        switch self {
+        case .small: return .short
+        case .medium: return .medium
+        case .large: return .long
+        }
+    }
+}
+
 struct Verse: Codable, Equatable {
     let surah: Int
     let ayahStart: Int
@@ -180,17 +196,35 @@ enum VerseStore {
         return Calendar.current.date(from: components) ?? Date(timeIntervalSince1970: 0)
     }()
 
+    static func pool(for sizeClass: VerseSizeClass, in verses: [Verse] = verses) -> [Verse] {
+        verses.filter { $0.tier.rawValue <= sizeClass.maxTier.rawValue }
+    }
+
+    // A distinct seed per size. Sharing one seed would advance all three pools
+    // in step, so a small and a large widget on the same desktop would show
+    // correlated verses. Small keeps the original seed so its order is
+    // unchanged from the shipped version.
+    private static func seed(for sizeClass: VerseSizeClass) -> UInt64 {
+        switch sizeClass {
+        case .small: return 0x4179_6168_5665_7273   // "AyahVers"
+        case .medium: return 0x4179_6168_4D65_6473  // "AyahMeds"
+        case .large: return 0x4179_6168_4C61_7267   // "AyahLarg"
+        }
+    }
+
     static func verse(
         for date: Date,
         every interval: RefreshInterval = .daily,
         offset: Int = 0,
+        sizeClass: VerseSizeClass = .small,
         in verses: [Verse] = verses,
         calendar: Calendar = .current
     ) -> Verse {
-        guard !verses.isEmpty else { return fallback }
+        let pool = pool(for: sizeClass, in: verses)
+        guard !pool.isEmpty else { return fallback }
         let period = periodIndex(for: date, every: interval, calendar: calendar) + offset
-        let position = ((period % verses.count) + verses.count) % verses.count
-        return verses[readingOrder(count: verses.count)[position]]
+        let position = ((period % pool.count) + pool.count) % pool.count
+        return pool[readingOrder(count: pool.count, seed: seed(for: sizeClass))[position]]
     }
 
     // Verses.json is stored in mushaf order, so walking it directly would show
@@ -198,10 +232,10 @@ enum VerseStore {
     // out with a fixed seeded shuffle: still fully deterministic and stateless,
     // and because the same permutation repeats every cycle, any run of `count`
     // consecutive periods shows every verse exactly once.
-    static func readingOrder(count: Int) -> [Int] {
+    static func readingOrder(count: Int, seed: UInt64 = 0x4179_6168_5665_7273) -> [Int] {
         guard count > 1 else { return Array(0..<max(count, 0)) }
         var order = Array(0..<count)
-        var rng = SplitMix64(seed: 0x4179_6168_5665_7273)  // "AyahVers"
+        var rng = SplitMix64(seed: seed)
         // Fisher-Yates, written out rather than using shuffle(using:) so the
         // order can never shift under us when the standard library changes.
         for i in stride(from: count - 1, to: 0, by: -1) {

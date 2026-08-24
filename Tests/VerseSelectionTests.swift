@@ -57,6 +57,82 @@ final class VerseSelectionTests: XCTestCase {
         XCTAssertEqual(verse.tier, .short)
     }
 
+    // MARK: - Size-class pools
+
+    private func stub(_ surah: Int, tier: VerseTier) -> Verse {
+        Verse(
+            surah: surah, ayahStart: 1, ayahEnd: 1, surahName: "S\(surah)",
+            arabic: "a", english: "b", tierRaw: tier.rawValue
+        )
+    }
+
+    private var mixedPool: [Verse] {
+        (1...30).map { stub($0, tier: VerseTier(rawValue: $0 % 3)!) }
+    }
+
+    func testPoolsNest() {
+        // A large widget must still be able to show a short verse. Anything
+        // else would make short verses vanish as the widget grows.
+        let small = VerseStore.pool(for: .small, in: mixedPool).map(\.reference)
+        let medium = VerseStore.pool(for: .medium, in: mixedPool).map(\.reference)
+        let large = VerseStore.pool(for: .large, in: mixedPool).map(\.reference)
+        XCTAssertTrue(Set(small).isSubset(of: Set(medium)))
+        XCTAssertTrue(Set(medium).isSubset(of: Set(large)))
+        XCTAssertEqual(large.count, mixedPool.count)
+    }
+
+    func testSmallPoolHoldsOnlyShortVerses() {
+        for verse in VerseStore.pool(for: .small, in: mixedPool) {
+            XCTAssertEqual(verse.tier, .short)
+        }
+    }
+
+    func testSizeClassesUseDifferentOrders() {
+        // With a shared seed the three sizes would march in step and two
+        // widgets on one desktop would correlate. Distinct seeds decorrelate.
+        // Compare whole cycles, not one date: two permutations agreeing at a
+        // single position is ordinary coincidence and would make this flaky.
+        let calendar = Calendar.current
+        let start = calendar.date(from: DateComponents(year: 2026, month: 3, day: 1))!
+        let onlyShort = (1...30).map { stub($0, tier: .short) }
+        var small: [String] = []
+        var large: [String] = []
+        for offset in 0..<onlyShort.count {
+            let day = calendar.date(byAdding: .day, value: offset, to: start)!
+            small.append(VerseStore.verse(for: day, sizeClass: .small, in: onlyShort).reference)
+            large.append(VerseStore.verse(for: day, sizeClass: .large, in: onlyShort).reference)
+        }
+        XCTAssertEqual(Set(small), Set(large), "identical pools should hold identical verses")
+        XCTAssertNotEqual(small, large, "distinct seeds should give distinct orders")
+    }
+
+    func testEachPoolCyclesWithoutRepeats() {
+        // The guarantee is per pool now, and each pool cycles at its own
+        // natural length rather than being padded to 365.
+        let calendar = Calendar.current
+        let start = calendar.date(from: DateComponents(year: 2026, month: 3, day: 1))!
+        for sizeClass in VerseSizeClass.allCases {
+            let pool = VerseStore.pool(for: sizeClass, in: mixedPool)
+            var seen = Set<String>()
+            for offset in 0..<pool.count {
+                let day = calendar.date(byAdding: .day, value: offset, to: start)!
+                seen.insert(
+                    VerseStore.verse(for: day, sizeClass: sizeClass, in: mixedPool).reference
+                )
+            }
+            XCTAssertEqual(seen.count, pool.count, "\(sizeClass) repeated inside one cycle")
+        }
+    }
+
+    func testSizeClassWithAnEmptyPoolFallsBack() {
+        // Nothing in the small pool must not crash; it degrades to the fallback.
+        let noShortVerses = (1...5).map { stub($0, tier: .long) }
+        XCTAssertEqual(
+            VerseStore.verse(for: Date(), sizeClass: .small, in: noShortVerses),
+            VerseStore.fallback
+        )
+    }
+
     func testSelectionIsDeterministic() {
         let date = Date(timeIntervalSince1970: 1_790_000_000)
         let first = VerseStore.verse(for: date, in: verses)
