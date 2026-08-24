@@ -88,10 +88,26 @@ struct VerseView: View {
             }
         }
         .padding(12)
+        .environment(\.colorScheme, contentColorScheme)
         .containerBackground(for: .widget) {
-            GlassBackground()
+            if let colors = entry.background.gradientColors {
+                ColorBackground(colors: colors)
+            } else {
+                GlassBackground()
+            }
         }
         .widgetURL(entry.verse.widgetLinkURL)
+    }
+
+    // Fixed-color backgrounds pin the text's scheme so it stays readable in
+    // either system appearance. In the accented (tinted) desktop style the
+    // system strips the background and tints content itself, so inherit.
+    @Environment(\.colorScheme) private var systemColorScheme
+    private var contentColorScheme: ColorScheme {
+        guard renderingMode == .fullColor, let forced = entry.background.forcedColorScheme else {
+            return systemColorScheme
+        }
+        return forced
     }
 
     private var englishFont: Font {
@@ -113,6 +129,27 @@ struct VerseView: View {
             return isLarge ? 12 : 5
         }
         return isLarge ? 4 : 3
+    }
+}
+
+// Solid color choice: a soft diagonal gradient with the same lit rim as the
+// glass look so every background reads as part of one family.
+private struct ColorBackground: View {
+    let colors: [Color]
+
+    var body: some View {
+        ZStack {
+            LinearGradient(colors: colors, startPoint: .topLeading, endPoint: .bottomTrailing)
+            ContainerRelativeShape()
+                .strokeBorder(
+                    LinearGradient(
+                        colors: [Color.white.opacity(0.35), Color.white.opacity(0.05)],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    ),
+                    lineWidth: 1
+                )
+        }
     }
 }
 

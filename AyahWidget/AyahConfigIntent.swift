@@ -28,6 +28,13 @@ struct IntervalOptionsProvider: DynamicOptionsProvider {
     }
 }
 
+struct BackgroundOptionsProvider: DynamicOptionsProvider {
+    func results() async throws -> [String] {
+        trace("BackgroundOptionsProvider queried")
+        return WidgetBackground.optionTitles
+    }
+}
+
 struct AyahConfigIntent: WidgetConfigurationIntent {
     static let title: LocalizedStringResource = "Ayah Options"
     static let description = IntentDescription("Choose what is shown and how often the verse changes.")
@@ -43,11 +50,18 @@ struct AyahConfigIntent: WidgetConfigurationIntent {
     @Parameter(title: "New verse", default: "Every day", optionsProvider: IntervalOptionsProvider())
     var interval: String
 
+    @Parameter(title: "Background", default: "Liquid Glass", optionsProvider: BackgroundOptionsProvider())
+    var background: String
+
     var displayMode: DisplayMode {
         DisplayMode(showArabic: showArabic, showEnglish: showEnglish)
     }
 
     var refreshInterval: RefreshInterval {
         RefreshInterval(configuredValue: interval)
+    }
+
+    var widgetBackground: WidgetBackground {
+        WidgetBackground(configuredValue: background)
     }
 }

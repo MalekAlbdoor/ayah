@@ -1,3 +1,4 @@
+import SwiftUI
 import XCTest
 
 final class ConfigMappingTests: XCTestCase {
@@ -25,6 +26,28 @@ final class ConfigMappingTests: XCTestCase {
     func testRefreshIntervalFallsBackToDaily() {
         XCTAssertEqual(RefreshInterval(configuredValue: ""), .daily)
         XCTAssertEqual(RefreshInterval(configuredValue: "garbage"), .daily)
+    }
+
+    func testBackgroundFromOptionTitles() {
+        for (background, title) in WidgetBackground.titles {
+            XCTAssertEqual(WidgetBackground(configuredValue: title), background)
+        }
+        XCTAssertEqual(WidgetBackground.optionTitles.count, WidgetBackground.allCases.count)
+    }
+
+    func testBackgroundFallsBackToLiquidGlass() {
+        XCTAssertEqual(WidgetBackground(configuredValue: ""), .liquidGlass)
+        XCTAssertEqual(WidgetBackground(configuredValue: "garbage"), .liquidGlass)
+        XCTAssertEqual(WidgetBackground(configuredValue: "ocean"), .ocean)  // raw token
+    }
+
+    func testEveryBackgroundKeepsTextLegible() {
+        for background in WidgetBackground.allCases where background != .liquidGlass {
+            XCTAssertNotNil(background.forcedColorScheme, "\(background) must pin a color scheme")
+            XCTAssertNotNil(background.gradientColors, "\(background) must define colors")
+        }
+        XCTAssertNil(WidgetBackground.liquidGlass.forcedColorScheme)
+        XCTAssertNil(WidgetBackground.liquidGlass.gradientColors)
     }
 
     func testEveryOptionTitleRoundTrips() {
