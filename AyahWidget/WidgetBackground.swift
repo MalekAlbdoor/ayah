@@ -41,13 +41,12 @@ enum WidgetBackground: String, CaseIterable {
     }
 
     // Fixed-color backgrounds pin the content's color scheme so text stays
-    // legible regardless of the system appearance. Liquid Glass pins light
-    // text because its wash is translucent smoke over the wallpaper. System
-    // follows the appearance setting, so it inherits.
+    // legible regardless of the system appearance. Liquid Glass sits on the
+    // system's frosted backdrop (white frost in light mode, dark frost in
+    // dark), so its text must follow the system scheme; System likewise.
     var forcedColorScheme: ColorScheme? {
         switch self {
-        case .system: return nil
-        case .liquidGlass: return .dark
+        case .liquidGlass, .system: return nil
         case .white, .sand: return .light
         case .ocean, .forest, .plum, .midnight, .charcoal: return .dark
         }

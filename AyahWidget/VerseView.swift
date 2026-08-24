@@ -155,23 +155,23 @@ private struct ColorBackground: View {
     }
 }
 
-// Widgets render off-screen, so blur materials cannot sample the wallpaper and
-// collapse to flat colors. This builds the glass look from translucency instead:
-// the wallpaper shows through a faint white wash with a lit rim. The wash is
-// the same in both appearances (the content pins light text on top); a heavier
-// light-mode wash used to read as a plain white card.
+// On the desktop the system already composites widgets over a frosted-glass
+// backdrop that samples the wallpaper (white frost in light mode, dark frost
+// in dark mode). Real liquid glass is therefore mostly staying out of the
+// way: only a whisper of wash and a lit rim on top of the system's frost.
+// Anything heavier reads as a flat card.
 private struct GlassBackground: View {
     var body: some View {
         ZStack {
             LinearGradient(
-                colors: [Color.white.opacity(0.18), Color.white.opacity(0.06)],
+                colors: [Color.white.opacity(0.10), Color.white.opacity(0.02)],
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
             )
             ContainerRelativeShape()
                 .strokeBorder(
                     LinearGradient(
-                        colors: [Color.white.opacity(0.40), Color.white.opacity(0.05)],
+                        colors: [Color.white.opacity(0.35), Color.white.opacity(0.05)],
                         startPoint: .topLeading,
                         endPoint: .bottomTrailing
                     ),

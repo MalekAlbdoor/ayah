@@ -46,10 +46,10 @@ final class ConfigMappingTests: XCTestCase {
             XCTAssertNotNil(background.forcedColorScheme, "\(background) must pin a color scheme")
             XCTAssertNotNil(background.gradientColors, "\(background) must define colors")
         }
-        // Liquid Glass is a translucent smoke wash, so it pins light text.
-        XCTAssertEqual(WidgetBackground.liquidGlass.forcedColorScheme, .dark)
+        // Liquid Glass sits on the system's frosted backdrop and System follows
+        // the appearance setting, so both inherit the system scheme.
+        XCTAssertNil(WidgetBackground.liquidGlass.forcedColorScheme)
         XCTAssertNil(WidgetBackground.liquidGlass.gradientColors)
-        // System follows the appearance setting.
         XCTAssertNil(WidgetBackground.system.forcedColorScheme)
         XCTAssertNil(WidgetBackground.system.gradientColors)
     }
