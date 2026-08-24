@@ -1,0 +1,77 @@
+name: QuranVerse
+options:
+  bundleIdPrefix: com.malek
+  deploymentTarget:
+    macOS: "26.0"
+  createIntermediateGroups: true
+settings:
+  base:
+    SWIFT_VERSION: "5.0"
+    CODE_SIGN_STYLE: Manual
+    CODE_SIGN_IDENTITY: "-"
+    DEVELOPMENT_TEAM: ""
+targets:
+  QuranVerse:
+    type: application
+    platform: macOS
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.malek.quranverse
+    sources:
+      - QuranVerse
+    info:
+      path: QuranVerse/Info.plist
+      properties:
+        LSUIElement: true
+        CFBundleDisplayName: QuranVerse
+        CFBundleURLTypes:
+          - CFBundleURLName: com.malek.quranverse
+            CFBundleURLSchemes: [quranverse]
+    entitlements:
+      path: QuranVerse/QuranVerse.entitlements
+      properties:
+        com.apple.security.app-sandbox: true
+    dependencies:
+      - target: QuranVerseWidget
+        embed: true
+        codeSign: true
+  QuranVerseWidget:
+    type: extensionkit-extension
+    platform: macOS
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.malek.quranverse.widget
+    sources:
+      - QuranVerseWidget
+    info:
+      path: QuranVerseWidget/Info.plist
+      properties:
+        CFBundleDisplayName: Quran Verse
+        EXAppExtensionAttributes:
+          EXExtensionPointIdentifier: com.apple.widgetkit-extension
+    entitlements:
+      path: QuranVerseWidget/QuranVerseWidget.entitlements
+      properties:
+        com.apple.security.app-sandbox: true
+  VerseSelectionTests:
+    type: bundle.unit-test
+    platform: macOS
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: YES
+    sources:
+      - Tests
+      - QuranVerseWidget/VerseStore.swift
+      - path: QuranVerseWidget/Verses.json
+        buildPhase: resources
+schemes:
+  QuranVerse:
+    build:
+      targets:
+        QuranVerse: all
+        VerseSelectionTests: [test]
+    run:
+      config: Debug
+    test:
+      config: Debug
+      targets: [VerseSelectionTests]
