@@ -8,7 +8,7 @@ final class VerseSelectionTests: XCTestCase {
     }
 
     func testDataLoadsAndIsWellFormed() {
-        XCTAssertGreaterThanOrEqual(verses.count, 100, "curated list should hold at least 100 verses")
+        XCTAssertEqual(verses.count, 365, "one verse per day of the year")
         for verse in verses {
             XCTAssertFalse(verse.arabic.isEmpty, "\(verse.reference) has empty Arabic text")
             XCTAssertFalse(verse.english.isEmpty, "\(verse.reference) has empty English text")
@@ -56,6 +56,23 @@ final class VerseSelectionTests: XCTestCase {
             seen.insert(verse.reference)
         }
         XCTAssertEqual(seen.count, verses.count, "one full cycle should visit every verse exactly once")
+    }
+
+    func testNoVerseIsUnreasonablyLongForAWidget() {
+        // 24:35, the Verse of Light, is the longest of the curated set and the
+        // worst case the small layout has to survive. Anything materially
+        // longer than that would not fit at a readable size.
+        for verse in verses {
+            XCTAssertLessThanOrEqual(
+                verse.arabic.count, 500,
+                "\(verse.reference) is too long to render in a widget"
+            )
+        }
+    }
+
+    func testEveryVerseIsUnique() {
+        let references = verses.map(\.reference)
+        XCTAssertEqual(Set(references).count, references.count, "the curated list repeats a verse")
     }
 
     func testReadingOrderIsAPermutation() {

@@ -9,21 +9,34 @@ struct VerseView: View {
     let entry: VerseEntry
 
     private var isLarge: Bool { family == .systemLarge }
+    private var isSmall: Bool { family == .systemSmall }
 
     private var showsArabic: Bool { entry.mode != .englishOnly }
 
     // In both-languages mode, long verses hide the English on medium so the
     // Arabic stays readable instead of both texts shrinking or truncating.
+    // Small has room for one language at most, and Arabic is the one that
+    // carries the widget, so English appears there only when it is the choice.
     private var showsEnglish: Bool {
         switch entry.mode {
         case .arabicOnly: return false
         case .englishOnly: return true
         case .both:
+            if isSmall { return false }
             return isLarge || entry.verse.arabic.count + entry.verse.english.count <= 260
         }
     }
 
+    // VoiceOver otherwise spells Arabic out letter by letter in the reader's
+    // own locale; tagging the run makes it speak as Arabic.
+    private var arabicText: AttributedString {
+        var text = AttributedString(entry.verse.arabic)
+        text.languageIdentifier = "ar"
+        return text
+    }
+
     private var arabicSize: CGFloat {
+        if isSmall { return 15 }
         if entry.mode == .arabicOnly {
             return isLarge ? 28 : 19
         }
@@ -31,6 +44,7 @@ struct VerseView: View {
     }
 
     private var arabicLineLimit: Int {
+        if isSmall { return 6 }
         if entry.mode == .arabicOnly {
             return isLarge ? 10 : 4
         }
@@ -43,7 +57,10 @@ struct VerseView: View {
                 Text(entry.verse.reference)
                     .font(.caption.smallCaps().weight(.semibold))
                     .foregroundStyle(.secondary)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.8)
                     .widgetAccentable()
+                    .accessibilityLabel(entry.verse.spokenReference)
 
                 Spacer(minLength: 8)
 
@@ -54,16 +71,17 @@ struct VerseView: View {
                 }
                 .buttonStyle(.plain)
                 .widgetAccentable()
+                .accessibilityLabel("Show another verse")
             }
 
             Spacer(minLength: 0)
 
             if showsArabic {
-                Text(entry.verse.arabic)
+                Text(arabicText)
                     .font(QuranFont.arabic(size: arabicSize))
                     .lineSpacing(isLarge ? 2 : 0)
                     .lineLimit(arabicLineLimit)
-                    .minimumScaleFactor(isLarge ? 0.55 : 0.8)
+                    .minimumScaleFactor(isSmall ? 0.5 : (isLarge ? 0.55 : 0.8))
                     .truncationMode(.tail)
                     .multilineTextAlignment(.trailing)
                     .frame(maxWidth: .infinity, alignment: .trailing)
@@ -77,7 +95,7 @@ struct VerseView: View {
                     .font(englishFont)
                     .foregroundStyle(englishStyle)
                     .lineLimit(englishLineLimit)
-                    .minimumScaleFactor(entry.mode == .englishOnly ? 0.7 : 0.9)
+                    .minimumScaleFactor(englishScaleFactor)
                     .truncationMode(.tail)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .layoutPriority(1)
@@ -87,7 +105,7 @@ struct VerseView: View {
                 }
             }
         }
-        .padding(12)
+        .padding(isSmall ? 10 : 12)
         .environment(\.colorScheme, contentColorScheme)
         .containerBackground(for: .widget) {
             if let colors = entry.background.gradientColors {
@@ -114,6 +132,7 @@ struct VerseView: View {
 
     private var englishFont: Font {
         if entry.mode == .englishOnly {
+            if isSmall { return .system(.footnote, design: .serif) }
             return .system(isLarge ? .title2 : .body, design: .serif)
         }
         return isLarge ? .callout : .footnote
@@ -128,9 +147,17 @@ struct VerseView: View {
 
     private var englishLineLimit: Int {
         if entry.mode == .englishOnly {
+            if isSmall { return 11 }
             return isLarge ? 12 : 5
         }
         return isLarge ? 4 : 3
+    }
+
+    // Small has the least room, so let the translation shrink further before
+    // truncating: cutting scripture mid-sentence is worse than smaller type.
+    private var englishScaleFactor: CGFloat {
+        guard entry.mode == .englishOnly else { return 0.9 }
+        return isSmall ? 0.55 : 0.7
     }
 }
 

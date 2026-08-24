@@ -19,7 +19,7 @@ struct AyahWidget: Widget {
         }
         .configurationDisplayName("Verse of the Day")
         .description("A daily verse from the Quran. Click to read it on quran.com.")
-        .supportedFamilies([.systemMedium, .systemLarge])
+        .supportedFamilies([.systemSmall, .systemMedium, .systemLarge])
         .contentMarginsDisabled()
     }
 }

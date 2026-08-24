@@ -14,6 +14,13 @@ struct Verse: Codable, Equatable {
             : "\(surahName) \(surah):\(ayahStart)-\(ayahEnd)"
     }
 
+    // VoiceOver reads "13:28" as a clock time, so spell the reference out.
+    var spokenReference: String {
+        ayahStart == ayahEnd
+            ? "\(surahName), chapter \(surah), verse \(ayahStart)"
+            : "\(surahName), chapter \(surah), verses \(ayahStart) to \(ayahEnd)"
+    }
+
     var quranComPath: String {
         ayahStart == ayahEnd ? "\(surah)/\(ayahStart)" : "\(surah)/\(ayahStart)-\(ayahEnd)"
     }

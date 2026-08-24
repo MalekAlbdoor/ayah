@@ -1,0 +1,43 @@
+Ayah bundles third-party material. The MIT license in LICENSE covers this
+project's source code only. The items below remain under their own terms.
+
+===============================================================================
+Quranic text (Arabic)
+===============================================================================
+
+The Arabic text is the Uthmani script edition (quran-uthmani), retrieved from
+the AlQuran Cloud API at https://alquran.cloud and stored in
+AyahWidget/Verses.json.
+
+===============================================================================
+English translation
+===============================================================================
+
+The English rendering is the Saheeh International translation (en.sahih),
+retrieved from the same API. The Saheeh International translation is the
+copyrighted work of its publisher and is included here for the purpose of
+reading and reflection. It is not placed under this project's MIT license.
+
+===============================================================================
+KFGQPC Uthmanic Script HAFS (AyahWidget/Fonts/UthmanicHafs.otf)
+===============================================================================
+
+Copyright (c) 2010 King Fahd Glorious Quran Printing Complex (KFGQPC),
+Al-Madinah Al-Munawwarah, Kingdom of Saudi Arabia. All rights reserved.
+
+KFGQPC retains full title and ownership of this typeface, both as artwork and
+as font software. From the font's own end-user license agreement:
+
+    Permission is hereby granted, Free of Cost, to any person obtaining a copy
+    of this Font accompanying this license, the rights to Use, Copy,
+    Distribute, subject to the following conditions:
+
+    The Font Software is provided "AS IS", and KFGQPC makes no warranties as to
+    its use or performance, fitness for a particular purpose. KFGQPC does not
+    and cannot warrant the performance or results you may obtain by using the
+    Font. In no event shall KFGQPC be liable for any Claims, Damages or other
+    Liability, including any Damages, arising from, out of the use or inability
+    to use the Font or from other dealings in the Font.
+
+The font is redistributed here unmodified. It may not be modified without the
+express written approval of KFGQPC. Font home: https://fonts.qurancomplex.gov.sa
