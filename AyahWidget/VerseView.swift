@@ -11,13 +11,14 @@ struct VerseView: View {
 
     private var showsArabic: Bool { entry.mode != .englishOnly }
 
-    // In both-languages mode, very long verses hide the English on medium so
-    // the Arabic can wrap and scale to fit instead of truncating.
+    // In both-languages mode, long verses hide the English on medium so the
+    // Arabic stays readable instead of both texts shrinking or truncating.
     private var showsEnglish: Bool {
         switch entry.mode {
         case .arabicOnly: return false
         case .englishOnly: return true
-        case .both: return isLarge || entry.verse.arabic.count <= 140
+        case .both:
+            return isLarge || entry.verse.arabic.count + entry.verse.english.count <= 260
         }
     }
 
@@ -49,7 +50,7 @@ struct VerseView: View {
                     .font(QuranFont.arabic(size: arabicSize))
                     .lineSpacing(isLarge ? 2 : 0)
                     .lineLimit(arabicLineLimit)
-                    .minimumScaleFactor(isLarge ? 0.55 : 0.6)
+                    .minimumScaleFactor(isLarge ? 0.55 : 0.8)
                     .truncationMode(.tail)
                     .multilineTextAlignment(.trailing)
                     .frame(maxWidth: .infinity, alignment: .trailing)
@@ -63,7 +64,7 @@ struct VerseView: View {
                     .font(englishFont)
                     .foregroundStyle(englishStyle)
                     .lineLimit(englishLineLimit)
-                    .minimumScaleFactor(entry.mode == .englishOnly ? 0.7 : (isLarge ? 1 : 0.65))
+                    .minimumScaleFactor(entry.mode == .englishOnly ? 0.7 : 0.9)
                     .truncationMode(.tail)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .layoutPriority(1)
@@ -97,7 +98,7 @@ struct VerseView: View {
         if entry.mode == .englishOnly {
             return isLarge ? 12 : 5
         }
-        return 4
+        return isLarge ? 4 : 3
     }
 }
 

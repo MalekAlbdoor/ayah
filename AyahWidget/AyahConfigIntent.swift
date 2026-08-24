@@ -14,10 +14,24 @@ enum DisplayMode: String, AppEnum {
     ]
 }
 
+extension RefreshInterval: AppEnum {
+    static let typeDisplayRepresentation: TypeDisplayRepresentation = "New verse"
+
+    static let caseDisplayRepresentations: [RefreshInterval: DisplayRepresentation] = [
+        .hourly: "Every hour",
+        .every6Hours: "Every 6 hours",
+        .daily: "Every day",
+        .every3Days: "Every 3 days",
+    ]
+}
+
 struct AyahConfigIntent: WidgetConfigurationIntent {
     static let title: LocalizedStringResource = "Ayah Options"
-    static let description = IntentDescription("Choose how the daily verse is shown.")
+    static let description = IntentDescription("Choose how the verse is shown and how often it changes.")
 
     @Parameter(title: "Show", default: .both)
     var mode: DisplayMode
+
+    @Parameter(title: "New verse", default: .daily)
+    var interval: RefreshInterval
 }

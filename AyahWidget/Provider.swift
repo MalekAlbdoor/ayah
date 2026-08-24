@@ -1,5 +1,6 @@
 import WidgetKit
 import Foundation
+import os
 
 struct VerseEntry: TimelineEntry {
     let date: Date
@@ -9,25 +10,27 @@ struct VerseEntry: TimelineEntry {
 
 struct Provider: AppIntentTimelineProvider {
     func placeholder(in context: Context) -> VerseEntry {
-        entry(for: now(), mode: .both)
+        entry(for: now(), mode: .both, interval: .daily)
     }
 
     func snapshot(for configuration: AyahConfigIntent, in context: Context) async -> VerseEntry {
-        entry(for: now(), mode: configuration.mode)
+        entry(for: now(), mode: configuration.mode, interval: configuration.interval)
     }
 
     func timeline(for configuration: AyahConfigIntent, in context: Context) async -> Timeline<VerseEntry> {
-        let calendar = Calendar.current
         let current = now()
-        let today = calendar.startOfDay(for: current)
-        let tomorrow = calendar.date(byAdding: .day, value: 1, to: today) ?? today.addingTimeInterval(86400)
-        // Two entries so the verse still rolls over at midnight even if the
+        let next = VerseStore.nextChange(after: current, every: configuration.interval)
+        #if DEBUG
+        Logger(subsystem: "com.malek.ayah.widget", category: "provider")
+            .info("timeline family=\(String(describing: context.family), privacy: .public) size=\(String(describing: context.displaySize), privacy: .public) mode=\(configuration.mode.rawValue, privacy: .public) interval=\(configuration.interval.rawValue, privacy: .public)")
+        #endif
+        // Two entries so the verse still rolls over on time even if the
         // system is late asking for a new timeline.
         let entries = [
-            entry(for: current, mode: configuration.mode),
-            entry(for: tomorrow, mode: configuration.mode),
+            entry(for: current, mode: configuration.mode, interval: configuration.interval),
+            entry(for: next, mode: configuration.mode, interval: configuration.interval),
         ]
-        return Timeline(entries: entries, policy: .after(tomorrow))
+        return Timeline(entries: entries, policy: .after(next))
     }
 
     private func now() -> Date {
@@ -45,7 +48,7 @@ struct Provider: AppIntentTimelineProvider {
         return Date()
     }
 
-    private func entry(for date: Date, mode: DisplayMode) -> VerseEntry {
-        VerseEntry(date: date, verse: VerseStore.verse(for: date), mode: mode)
+    private func entry(for date: Date, mode: DisplayMode, interval: RefreshInterval) -> VerseEntry {
+        VerseEntry(date: date, verse: VerseStore.verse(for: date, every: interval), mode: mode)
     }
 }

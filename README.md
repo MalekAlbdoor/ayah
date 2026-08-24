@@ -11,11 +11,12 @@ A macOS desktop widget that shows one Quran verse per day and opens that verse o
 
 ## Widget options
 
-Right-click the widget and choose Edit Widget to set **Show**:
+Right-click the widget and choose Edit Widget:
 
-- **Arabic and English** (default)
-- **Arabic only** - larger mushaf script with more lines
-- **English only** - serif treatment at a larger size
+- **Show**: Arabic and English (default), Arabic only (larger mushaf script with more lines), or English only (serif treatment at a larger size).
+- **New verse**: every hour, every 6 hours, every day (default), or every 3 days. Hour-based intervals change on wall-clock boundaries (6:00, 12:00, 18:00, midnight).
+
+On the medium size in Arabic-and-English mode, verses whose combined text cannot fit at readable sizes show only the Arabic; the large size always shows both.
 
 ## Building
 

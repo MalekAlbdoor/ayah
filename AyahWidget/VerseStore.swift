@@ -27,6 +27,13 @@ struct Verse: Codable, Equatable {
     }
 }
 
+enum RefreshInterval: String, CaseIterable {
+    case hourly
+    case every6Hours
+    case daily
+    case every3Days
+}
+
 enum VerseStore {
     private final class BundleLocator {}
 
@@ -63,14 +70,60 @@ enum VerseStore {
         return Calendar.current.date(from: components) ?? Date(timeIntervalSince1970: 0)
     }()
 
-    static func verse(for date: Date, in verses: [Verse] = verses, calendar: Calendar = .current) -> Verse {
+    static func verse(
+        for date: Date,
+        every interval: RefreshInterval = .daily,
+        in verses: [Verse] = verses,
+        calendar: Calendar = .current
+    ) -> Verse {
         guard !verses.isEmpty else { return fallback }
-        let days = calendar.dateComponents(
-            [.day],
-            from: calendar.startOfDay(for: epoch),
-            to: calendar.startOfDay(for: date)
-        ).day ?? 0
-        let index = ((days % verses.count) + verses.count) % verses.count
+        let period = periodIndex(for: date, every: interval, calendar: calendar)
+        let index = ((period % verses.count) + verses.count) % verses.count
         return verses[index]
+    }
+
+    // Hour-based periods anchor to each day's local midnight so boundaries
+    // land on wall-clock hours (0:00, 6:00, 12:00, 18:00) regardless of DST.
+    static func periodIndex(for date: Date, every interval: RefreshInterval, calendar: Calendar = .current) -> Int {
+        let anchor = calendar.startOfDay(for: epoch)
+        let dayCount = days(from: anchor, to: date, calendar: calendar)
+        switch interval {
+        case .daily:
+            return dayCount
+        case .every3Days:
+            return Int(floor(Double(dayCount) / 3))
+        case .hourly:
+            return dayCount * 24 + calendar.component(.hour, from: date)
+        case .every6Hours:
+            return dayCount * 4 + calendar.component(.hour, from: date) / 6
+        }
+    }
+
+    static func nextChange(after date: Date, every interval: RefreshInterval, calendar: Calendar = .current) -> Date {
+        let anchor = calendar.startOfDay(for: epoch)
+        let startOfDay = calendar.startOfDay(for: date)
+        let nextMidnight = calendar.date(byAdding: .day, value: 1, to: startOfDay)
+            ?? date.addingTimeInterval(86400)
+        switch interval {
+        case .daily:
+            return nextMidnight
+        case .every3Days:
+            let period = periodIndex(for: date, every: interval, calendar: calendar)
+            return calendar.date(byAdding: .day, value: (period + 1) * 3, to: anchor) ?? nextMidnight
+        case .hourly:
+            return calendar.nextDate(
+                after: date,
+                matching: DateComponents(minute: 0, second: 0),
+                matchingPolicy: .nextTime
+            ) ?? date.addingTimeInterval(3600)
+        case .every6Hours:
+            let boundary = (calendar.component(.hour, from: date) / 6 + 1) * 6
+            guard boundary < 24 else { return nextMidnight }
+            return calendar.date(bySettingHour: boundary, minute: 0, second: 0, of: date) ?? nextMidnight
+        }
+    }
+
+    private static func days(from anchor: Date, to date: Date, calendar: Calendar) -> Int {
+        calendar.dateComponents([.day], from: anchor, to: calendar.startOfDay(for: date)).day ?? 0
     }
 }

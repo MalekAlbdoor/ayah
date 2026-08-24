@@ -66,4 +66,51 @@ final class VerseSelectionTests: XCTestCase {
     func testEmptyListFallsBack() {
         XCTAssertEqual(VerseStore.verse(for: Date(), in: []), VerseStore.fallback)
     }
+
+    func testHourlyChangesEachHour() {
+        let calendar = Calendar.current
+        let base = calendar.date(from: DateComponents(year: 2026, month: 8, day: 24, hour: 10, minute: 30))!
+        let nextHour = calendar.date(from: DateComponents(year: 2026, month: 8, day: 24, hour: 11, minute: 5))!
+        XCTAssertNotEqual(
+            VerseStore.verse(for: base, every: .hourly, in: verses),
+            VerseStore.verse(for: nextHour, every: .hourly, in: verses)
+        )
+        XCTAssertEqual(
+            VerseStore.verse(for: base, every: .hourly, in: verses),
+            VerseStore.verse(for: base.addingTimeInterval(600), every: .hourly, in: verses)
+        )
+    }
+
+    func testEvery3DaysIsStableWithinPeriod() {
+        let calendar = Calendar.current
+        let period = VerseStore.periodIndex(for: Date(), every: .every3Days)
+        let start = VerseStore.nextChange(after: Date(), every: .every3Days)
+        let justBefore = start.addingTimeInterval(-60)
+        let justAfter = start.addingTimeInterval(60)
+        XCTAssertEqual(VerseStore.periodIndex(for: justBefore, every: .every3Days, calendar: calendar), period)
+        XCTAssertEqual(VerseStore.periodIndex(for: justAfter, every: .every3Days, calendar: calendar), period + 1)
+        XCTAssertNotEqual(
+            VerseStore.verse(for: justBefore, every: .every3Days, in: verses),
+            VerseStore.verse(for: justAfter, every: .every3Days, in: verses)
+        )
+    }
+
+    func testNextChangeBoundaries() {
+        let calendar = Calendar.current
+        let date = calendar.date(from: DateComponents(year: 2026, month: 8, day: 24, hour: 10, minute: 30))!
+
+        let nextHour = VerseStore.nextChange(after: date, every: .hourly)
+        XCTAssertEqual(calendar.component(.minute, from: nextHour), 0)
+        XCTAssertEqual(calendar.component(.hour, from: nextHour), 11)
+
+        let nextDay = VerseStore.nextChange(after: date, every: .daily)
+        XCTAssertEqual(nextDay, calendar.date(from: DateComponents(year: 2026, month: 8, day: 25))!)
+
+        let next6h = VerseStore.nextChange(after: date, every: .every6Hours)
+        XCTAssertEqual(calendar.component(.hour, from: next6h), 12)
+
+        let next3d = VerseStore.nextChange(after: date, every: .every3Days)
+        XCTAssertGreaterThan(next3d, date)
+        XCTAssertEqual(calendar.component(.hour, from: next3d), 0)
+    }
 }
