@@ -106,6 +106,31 @@ struct Verse: Codable, Equatable {
     }
 }
 
+extension Verse {
+    // Long verses drop the English so the Arabic stays readable instead of both
+    // shrinking or truncating. Small has room for one language at most, and
+    // Arabic is the one that carries the widget.
+    //
+    // Thresholds are measured, not guessed: laying the real Uthmani font out at
+    // each family's font size, line limit, and box gives the point past which
+    // one of the two texts truncates. Large tolerates more than medium because
+    // its box is more than twice as tall. Measured 2026-08-24; see
+    // docs/superpowers/specs/2026-08-24-verse-curation-and-size-tiers-design.md
+    func showsEnglish(sizeClass: VerseSizeClass, mode: DisplayMode) -> Bool {
+        switch mode {
+        case .arabicOnly: return false
+        case .englishOnly: return true
+        case .both:
+            let combined = arabic.count + english.count
+            switch sizeClass {
+            case .small: return false
+            case .medium: return combined <= 260
+            case .large: return combined <= 390
+            }
+        }
+    }
+}
+
 enum DisplayMode: String {
     case both
     case arabicOnly

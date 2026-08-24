@@ -151,6 +151,38 @@ final class VerseSelectionTests: XCTestCase {
         XCTAssertEqual(VerseSizeClass(family: .systemExtraLarge), .small)
     }
 
+    // MARK: - English visibility
+
+    private func sized(arabic: Int, english: Int) -> Verse {
+        Verse(surah: 2, ayahStart: 1, ayahEnd: 1, surahName: "Al-Baqara",
+              arabic: String(repeating: "a", count: arabic),
+              english: String(repeating: "b", count: english))
+    }
+
+    func testSmallNeverShowsEnglishInBothMode() {
+        // Small has room for one language, and Arabic is the one that carries
+        // the widget. This is why the small pool is capped on Arabic alone.
+        XCTAssertFalse(sized(arabic: 10, english: 10).showsEnglish(sizeClass: .small, mode: .both))
+    }
+
+    func testMediumDropsEnglishPastItsThreshold() {
+        XCTAssertTrue(sized(arabic: 130, english: 130).showsEnglish(sizeClass: .medium, mode: .both))
+        XCTAssertFalse(sized(arabic: 131, english: 130).showsEnglish(sizeClass: .medium, mode: .both))
+    }
+
+    func testLargeDropsEnglishPastItsThreshold() {
+        // Large used to show English unconditionally, which truncated the
+        // translation on 17 of the curated verses. It now adapts like medium.
+        XCTAssertTrue(sized(arabic: 200, english: 190).showsEnglish(sizeClass: .large, mode: .both))
+        XCTAssertFalse(sized(arabic: 200, english: 191).showsEnglish(sizeClass: .large, mode: .both))
+    }
+
+    func testExplicitModesIgnoreLength() {
+        let long = sized(arabic: 900, english: 900)
+        XCTAssertTrue(long.showsEnglish(sizeClass: .small, mode: .englishOnly))
+        XCTAssertFalse(long.showsEnglish(sizeClass: .large, mode: .arabicOnly))
+    }
+
     func testSelectionIsDeterministic() {
         let date = Date(timeIntervalSince1970: 1_790_000_000)
         let first = VerseStore.verse(for: date, in: verses)

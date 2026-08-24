@@ -13,18 +13,9 @@ struct VerseView: View {
 
     private var showsArabic: Bool { entry.mode != .englishOnly }
 
-    // In both-languages mode, long verses hide the English on medium so the
-    // Arabic stays readable instead of both texts shrinking or truncating.
-    // Small has room for one language at most, and Arabic is the one that
-    // carries the widget, so English appears there only when it is the choice.
+    // The rule lives on Verse so it can be tested without a widget host.
     private var showsEnglish: Bool {
-        switch entry.mode {
-        case .arabicOnly: return false
-        case .englishOnly: return true
-        case .both:
-            if isSmall { return false }
-            return isLarge || entry.verse.arabic.count + entry.verse.english.count <= 260
-        }
+        entry.verse.showsEnglish(sizeClass: VerseSizeClass(family: family), mode: entry.mode)
     }
 
     // VoiceOver otherwise spells Arabic out letter by letter in the reader's
