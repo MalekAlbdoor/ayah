@@ -7,7 +7,7 @@ A macOS desktop widget that shows one Quran verse per day and opens that verse o
 - A curated list of 105 well-known verses rotates deterministically by local date. The verse changes at midnight and the cycle repeats.
 - Verse text (Uthmani Arabic + Saheeh International English) is bundled offline in `AyahWidget/Verses.json`. The widget makes no network calls; neither target has a network entitlement.
 - Widgets on macOS can only launch their containing app, so `Ayah.app` is an invisible `LSUIElement` agent: it receives `ayah://` URLs from the widget, opens the matching `https://quran.com/{surah}/{ayah}` link in your default browser, and quits.
-- Liquid Glass: the desktop composites widgets over a system frosted backdrop (white frost in light mode, dark frost in dark), so the default background only adds a faint wash and a lit rim on top of that frost, and the text follows the system appearance. When the desktop widget style is set to a tinted mode, the system replaces backgrounds with real glass and the view adapts through the accented rendering mode.
+- Liquid Glass: the macOS 26 desktop composites every widget on a Liquid Glass platter that samples the wallpaper. Anything painted into `containerBackground` sits on that platter and reads as a flat card, so the Liquid Glass option paints nothing at all (`Color.clear`) and lets the system's glass show the wallpaper through, in both appearances and in the dimmed unfocused-desktop state. Text follows the system appearance; the system adjusts contrast in the dimmed and tinted treatments itself.
 
 ## Widget options
 

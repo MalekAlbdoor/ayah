@@ -160,24 +160,13 @@ private struct ColorBackground: View {
 // in dark mode). Real liquid glass is therefore mostly staying out of the
 // way: only a whisper of wash and a lit rim on top of the system's frost.
 // Anything heavier reads as a flat card.
+// The macOS 26 desktop composites every widget on a Liquid Glass platter that
+// samples the wallpaper. Any paint layered on top of it congeals into a flat
+// card (the dimmed-desktop look everyone wants IS the platter with the custom
+// background removed), so real glass means drawing nothing at all.
 private struct GlassBackground: View {
     var body: some View {
-        ZStack {
-            LinearGradient(
-                colors: [Color.white.opacity(0.10), Color.white.opacity(0.02)],
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-            )
-            ContainerRelativeShape()
-                .strokeBorder(
-                    LinearGradient(
-                        colors: [Color.white.opacity(0.35), Color.white.opacity(0.05)],
-                        startPoint: .topLeading,
-                        endPoint: .bottomTrailing
-                    ),
-                    lineWidth: 1
-                )
-        }
+        Color.clear
     }
 }
 
