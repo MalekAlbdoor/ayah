@@ -34,6 +34,7 @@ struct NextVerseIntent: AppIntent {
     func perform() async throws -> some IntentResult {
         let defaults = UserDefaults.standard
         defaults.set(defaults.integer(forKey: "manualOffset") + 1, forKey: "manualOffset")
+        trace("NextVerseIntent performed, offset now \(defaults.integer(forKey: "manualOffset"))")
         return .result()
     }
 }

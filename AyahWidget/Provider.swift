@@ -8,29 +8,21 @@ struct VerseEntry: TimelineEntry {
     let mode: DisplayMode
 }
 
-private let log = Logger(subsystem: "com.malek.ayah.widget", category: "provider")
-
 struct Provider: AppIntentTimelineProvider {
     func placeholder(in context: Context) -> VerseEntry {
-        #if DEBUG
-        log.notice("placeholder size=\(String(describing: context.displaySize), privacy: .public)")
-        #endif
+        trace("placeholder size=\(context.displaySize)")
         return entry(for: now(), mode: .both, interval: .daily)
     }
 
     func snapshot(for configuration: AyahConfigIntent, in context: Context) async -> VerseEntry {
-        #if DEBUG
-        log.notice("snapshot mode=\(configuration.mode.rawValue, privacy: .public) interval=\(configuration.interval.rawValue, privacy: .public)")
-        #endif
+        trace("snapshot mode=\(configuration.mode.rawValue) interval=\(configuration.interval.rawValue)")
         return entry(for: now(), mode: configuration.mode, interval: configuration.interval)
     }
 
     func timeline(for configuration: AyahConfigIntent, in context: Context) async -> Timeline<VerseEntry> {
         let current = now()
         let next = VerseStore.nextChange(after: current, every: configuration.interval)
-        #if DEBUG
-        log.notice("timeline family=\(String(describing: context.family), privacy: .public) size=\(String(describing: context.displaySize), privacy: .public) mode=\(configuration.mode.rawValue, privacy: .public) interval=\(configuration.interval.rawValue, privacy: .public)")
-        #endif
+        trace("timeline family=\(context.family) size=\(context.displaySize) mode=\(configuration.mode.rawValue) interval=\(configuration.interval.rawValue)")
         // Two entries so the verse still rolls over on time even if the
         // system is late asking for a new timeline.
         let entries = [

@@ -10,6 +10,9 @@ settings:
     CODE_SIGN_STYLE: Manual
     CODE_SIGN_IDENTITY: "-"
     DEVELOPMENT_TEAM: ""
+    # Xcode 26 Debug builds otherwise produce a Previews stub executor whose
+    # widget extension never runs the real code outside of Xcode.
+    ENABLE_DEBUG_DYLIB: NO
 targets:
   Ayah:
     type: application
@@ -20,6 +23,12 @@ targets:
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
     sources:
       - Ayah
+      # Widget configuration intents must also be compiled into the containing
+      # app so chronod can resolve the stored configuration (the app bundle
+      # gets its own Metadata.appintents, like every widget-shipping app).
+      - AyahWidget/AyahConfigIntent.swift
+      - AyahWidget/VerseStore.swift
+      - AyahWidget/Trace.swift
     info:
       path: Ayah/Info.plist
       properties:

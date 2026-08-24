@@ -1,4 +1,5 @@
 import AppKit
+import WidgetKit
 
 // Invisible relay: the widget can only launch its containing app, so this app
 // translates ayah:// URLs into quran.com links, opens the browser, and quits.
@@ -10,6 +11,24 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             forEventClass: AEEventClass(kInternetEventClass),
             andEventID: AEEventID(kAEGetURL)
         )
+    }
+
+    func applicationDidFinishLaunching(_ notification: Notification) {
+        // Launching the app nudges chronod to re-request timelines, so a
+        // plain `open Ayah.app` refreshes the widget after updates.
+        WidgetCenter.shared.reloadAllTimelines()
+        WidgetCenter.shared.getCurrentConfigurations { result in
+            switch result {
+            case .success(let infos):
+                trace("app sees \(infos.count) widget instance(s)")
+                for info in infos {
+                    let intent = info.widgetConfigurationIntent(of: AyahConfigIntent.self)
+                    trace("instance kind=\(info.kind) family=\(info.family) mode=\(intent?.mode.rawValue ?? "nil") interval=\(intent?.interval.rawValue ?? "nil")")
+                }
+            case .failure(let error):
+                trace("getCurrentConfigurations failed: \(error)")
+            }
+        }
     }
 
     func application(_ application: NSApplication, open urls: [URL]) {
