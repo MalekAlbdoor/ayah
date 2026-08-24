@@ -166,7 +166,9 @@ private struct ColorBackground: View {
 // background removed), so real glass means drawing nothing at all.
 private struct GlassBackground: View {
     var body: some View {
-        Color.clear
+        // Test: nearly clear but non-empty, to check whether the dark platter
+        // fill is a system fallback for empty backgrounds.
+        Color.white.opacity(0.01)
     }
 }
 
