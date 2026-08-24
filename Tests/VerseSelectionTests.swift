@@ -67,6 +67,13 @@ final class VerseSelectionTests: XCTestCase {
         XCTAssertEqual(VerseStore.verse(for: Date(), in: []), VerseStore.fallback)
     }
 
+    func testManualOffsetAdvancesAndWraps() {
+        let date = Date(timeIntervalSince1970: 1_790_000_000)
+        let base = VerseStore.verse(for: date, in: verses)
+        XCTAssertNotEqual(VerseStore.verse(for: date, offset: 1, in: verses), base)
+        XCTAssertEqual(VerseStore.verse(for: date, offset: verses.count, in: verses), base)
+    }
+
     func testHourlyChangesEachHour() {
         let calendar = Calendar.current
         let base = calendar.date(from: DateComponents(year: 2026, month: 8, day: 24, hour: 10, minute: 30))!

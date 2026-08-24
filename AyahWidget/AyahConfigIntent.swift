@@ -25,6 +25,19 @@ extension RefreshInterval: AppEnum {
     ]
 }
 
+// Interactive widget button: advances to another verse immediately by bumping
+// a stored offset that the provider adds to the schedule-based index.
+struct NextVerseIntent: AppIntent {
+    static let title: LocalizedStringResource = "New Verse"
+    static let description = IntentDescription("Show another verse now.")
+
+    func perform() async throws -> some IntentResult {
+        let defaults = UserDefaults.standard
+        defaults.set(defaults.integer(forKey: "manualOffset") + 1, forKey: "manualOffset")
+        return .result()
+    }
+}
+
 struct AyahConfigIntent: WidgetConfigurationIntent {
     static let title: LocalizedStringResource = "Ayah Options"
     static let description = IntentDescription("Choose how the verse is shown and how often it changes.")

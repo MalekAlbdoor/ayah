@@ -1,5 +1,6 @@
 import SwiftUI
 import WidgetKit
+import AppIntents
 
 struct VerseView: View {
     @Environment(\.widgetFamily) private var family
@@ -38,10 +39,22 @@ struct VerseView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: isLarge ? 8 : 4) {
-            Text(entry.verse.reference)
-                .font(.caption.smallCaps().weight(.semibold))
-                .foregroundStyle(.secondary)
+            HStack(alignment: .firstTextBaseline) {
+                Text(entry.verse.reference)
+                    .font(.caption.smallCaps().weight(.semibold))
+                    .foregroundStyle(.secondary)
+                    .widgetAccentable()
+
+                Spacer(minLength: 8)
+
+                Button(intent: NextVerseIntent()) {
+                    Image(systemName: "arrow.clockwise")
+                        .font(.caption2.weight(.semibold))
+                        .foregroundStyle(.secondary)
+                }
+                .buttonStyle(.plain)
                 .widgetAccentable()
+            }
 
             Spacer(minLength: 0)
 
@@ -74,6 +87,7 @@ struct VerseView: View {
                 }
             }
         }
+        .padding(12)
         .containerBackground(for: .widget) {
             GlassBackground()
         }

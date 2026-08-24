@@ -73,11 +73,12 @@ enum VerseStore {
     static func verse(
         for date: Date,
         every interval: RefreshInterval = .daily,
+        offset: Int = 0,
         in verses: [Verse] = verses,
         calendar: Calendar = .current
     ) -> Verse {
         guard !verses.isEmpty else { return fallback }
-        let period = periodIndex(for: date, every: interval, calendar: calendar)
+        let period = periodIndex(for: date, every: interval, calendar: calendar) + offset
         let index = ((period % verses.count) + verses.count) % verses.count
         return verses[index]
     }

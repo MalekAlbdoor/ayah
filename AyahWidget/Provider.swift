@@ -8,21 +8,28 @@ struct VerseEntry: TimelineEntry {
     let mode: DisplayMode
 }
 
+private let log = Logger(subsystem: "com.malek.ayah.widget", category: "provider")
+
 struct Provider: AppIntentTimelineProvider {
     func placeholder(in context: Context) -> VerseEntry {
-        entry(for: now(), mode: .both, interval: .daily)
+        #if DEBUG
+        log.notice("placeholder size=\(String(describing: context.displaySize), privacy: .public)")
+        #endif
+        return entry(for: now(), mode: .both, interval: .daily)
     }
 
     func snapshot(for configuration: AyahConfigIntent, in context: Context) async -> VerseEntry {
-        entry(for: now(), mode: configuration.mode, interval: configuration.interval)
+        #if DEBUG
+        log.notice("snapshot mode=\(configuration.mode.rawValue, privacy: .public) interval=\(configuration.interval.rawValue, privacy: .public)")
+        #endif
+        return entry(for: now(), mode: configuration.mode, interval: configuration.interval)
     }
 
     func timeline(for configuration: AyahConfigIntent, in context: Context) async -> Timeline<VerseEntry> {
         let current = now()
         let next = VerseStore.nextChange(after: current, every: configuration.interval)
         #if DEBUG
-        Logger(subsystem: "com.malek.ayah.widget", category: "provider")
-            .info("timeline family=\(String(describing: context.family), privacy: .public) size=\(String(describing: context.displaySize), privacy: .public) mode=\(configuration.mode.rawValue, privacy: .public) interval=\(configuration.interval.rawValue, privacy: .public)")
+        log.notice("timeline family=\(String(describing: context.family), privacy: .public) size=\(String(describing: context.displaySize), privacy: .public) mode=\(configuration.mode.rawValue, privacy: .public) interval=\(configuration.interval.rawValue, privacy: .public)")
         #endif
         // Two entries so the verse still rolls over on time even if the
         // system is late asking for a new timeline.
@@ -49,6 +56,7 @@ struct Provider: AppIntentTimelineProvider {
     }
 
     private func entry(for date: Date, mode: DisplayMode, interval: RefreshInterval) -> VerseEntry {
-        VerseEntry(date: date, verse: VerseStore.verse(for: date, every: interval), mode: mode)
+        let offset = UserDefaults.standard.integer(forKey: "manualOffset")
+        return VerseEntry(date: date, verse: VerseStore.verse(for: date, every: interval, offset: offset), mode: mode)
     }
 }
