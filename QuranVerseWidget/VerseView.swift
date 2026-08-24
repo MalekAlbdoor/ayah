@@ -9,8 +9,14 @@ struct VerseView: View {
 
     private var isLarge: Bool { family == .systemLarge }
 
+    // On medium, very long verses hide the English so the Arabic can wrap
+    // and scale to fit instead of truncating.
+    private var showsEnglish: Bool {
+        isLarge || entry.verse.arabic.count <= 140
+    }
+
     var body: some View {
-        VStack(alignment: .leading, spacing: isLarge ? 10 : 6) {
+        VStack(alignment: .leading, spacing: isLarge ? 8 : 4) {
             Text(entry.verse.reference)
                 .font(.caption.smallCaps().weight(.semibold))
                 .foregroundStyle(.secondary)
@@ -19,23 +25,26 @@ struct VerseView: View {
             Spacer(minLength: 0)
 
             Text(entry.verse.arabic)
-                .font(QuranFont.arabic(size: isLarge ? 25 : 20))
-                .lineSpacing(isLarge ? 4 : 2)
-                .lineLimit(isLarge ? 6 : 3)
-                .minimumScaleFactor(0.85)
+                .font(QuranFont.arabic(size: isLarge ? 24 : 17))
+                .lineSpacing(isLarge ? 2 : 0)
+                .lineLimit(isLarge ? 9 : (showsEnglish ? 3 : 4))
+                .minimumScaleFactor(isLarge ? 0.55 : 0.6)
                 .truncationMode(.tail)
                 .multilineTextAlignment(.trailing)
                 .frame(maxWidth: .infinity, alignment: .trailing)
-                .padding(.top, 2)
+                .layoutPriority(2)
 
             Spacer(minLength: 0)
 
-            Text(entry.verse.english)
-                .font(isLarge ? .callout : .footnote)
-                .foregroundStyle(renderingMode == .accented ? .primary : .secondary)
-                .lineLimit(isLarge ? 4 : 2)
-                .truncationMode(.tail)
-                .frame(maxWidth: .infinity, alignment: .leading)
+            if showsEnglish {
+                Text(entry.verse.english)
+                    .font(isLarge ? .callout : .footnote)
+                    .foregroundStyle(renderingMode == .accented ? .primary : .secondary)
+                    .lineLimit(isLarge ? 4 : 2)
+                    .truncationMode(.tail)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .layoutPriority(1)
+            }
         }
         .containerBackground(for: .widget) {
             GlassBackground()
