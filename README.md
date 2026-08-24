@@ -13,8 +13,12 @@ A macOS desktop widget that shows one Quran verse per day and opens that verse o
 
 Right-click the widget and choose Edit Widget:
 
-- **Show**: Arabic and English (default), Arabic only (larger mushaf script with more lines), or English only (serif treatment at a larger size).
+- **Arabic text** / **English translation**: two toggles. Both on (default) shows both; turn one off for Arabic only (larger mushaf script with more lines) or English only (serif treatment at a larger size). Turning both off falls back to showing both.
 - **New verse**: every hour, every 6 hours, every day (default), or every 3 days. Hour-based intervals change on wall-clock boundaries (6:00, 12:00, 18:00, midnight).
+
+### Why the options are toggles, not a dropdown
+
+Configuration parameters deliberately use only primitive types (Bool/String). `AppEnum` parameters are decoded by fetching type metadata from `linkd`, and on macOS 26 linkd rejects processes whose code signature carries no Team ID (`Rejecting invalid client due to requiresValidatedBundle` / `Unable to get teamId` in its log). This project is ad-hoc signed (`CODE_SIGN_IDENTITY: "-"`), so enum parameters silently decode to their defaults while Bool and String parameters arrive intact. If the project is ever signed with a real Apple Development certificate (which embeds a Team ID), `AppEnum` parameters would work again. The **New verse** option is a String parameter fed by a `DynamicOptionsProvider`; it also accepts the raw tokens (`daily`, `every3Days`, ...) that configurations saved by older builds carry.
 
 On the medium size in Arabic-and-English mode, verses whose combined text cannot fit at readable sizes show only the Arabic; the large size always shows both.
 
@@ -60,6 +64,17 @@ defaults write ~/Library/Containers/com.malek.ayah.widget/Data/Library/Preferenc
 ```
 
 Remove with `defaults delete` on the same domain.
+
+## Debugging delivered configuration
+
+Debug builds append every provider call to
+`~/Library/Containers/com.malek.ayah.widget/Data/Library/Application Support/trace.log`,
+including the raw and resolved configuration values. The configuration itself is
+stored by Notification Center in
+`~/Library/Containers/com.apple.notificationcenterui/.../com.apple.notificationcenterui.plist`
+under `widgets.instances` (a keyed archive holding length-prefixed serialized
+parameters). After changing it, `killall NotificationCenter chronod` pushes the
+new value through to the extension.
 
 ## Regenerating verse data
 

@@ -15,19 +15,19 @@ struct Provider: AppIntentTimelineProvider {
     }
 
     func snapshot(for configuration: AyahConfigIntent, in context: Context) async -> VerseEntry {
-        trace("snapshot mode=\(configuration.mode.rawValue) interval=\(configuration.interval.rawValue)")
-        return entry(for: now(), mode: configuration.mode, interval: configuration.interval)
+        trace("snapshot arabic=\(configuration.showArabic) english=\(configuration.showEnglish) mode=\(configuration.displayMode.rawValue) interval=\(configuration.interval) -> \(configuration.refreshInterval.rawValue)")
+        return entry(for: now(), mode: configuration.displayMode, interval: configuration.refreshInterval)
     }
 
     func timeline(for configuration: AyahConfigIntent, in context: Context) async -> Timeline<VerseEntry> {
         let current = now()
-        let next = VerseStore.nextChange(after: current, every: configuration.interval)
-        trace("timeline family=\(context.family) size=\(context.displaySize) mode=\(configuration.mode.rawValue) interval=\(configuration.interval.rawValue)")
+        let next = VerseStore.nextChange(after: current, every: configuration.refreshInterval)
+        trace("timeline family=\(context.family) size=\(context.displaySize) arabic=\(configuration.showArabic) english=\(configuration.showEnglish) mode=\(configuration.displayMode.rawValue) interval=\(configuration.interval) -> \(configuration.refreshInterval.rawValue)")
         // Two entries so the verse still rolls over on time even if the
         // system is late asking for a new timeline.
         let entries = [
-            entry(for: current, mode: configuration.mode, interval: configuration.interval),
-            entry(for: next, mode: configuration.mode, interval: configuration.interval),
+            entry(for: current, mode: configuration.displayMode, interval: configuration.refreshInterval),
+            entry(for: next, mode: configuration.displayMode, interval: configuration.refreshInterval),
         ]
         return Timeline(entries: entries, policy: .after(next))
     }

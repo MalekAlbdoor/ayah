@@ -1,29 +1,11 @@
 import AppIntents
 
-enum DisplayMode: String, AppEnum {
-    case both
-    case arabicOnly
-    case englishOnly
-
-    static let typeDisplayRepresentation: TypeDisplayRepresentation = "Display"
-
-    static let caseDisplayRepresentations: [DisplayMode: DisplayRepresentation] = [
-        .both: "Arabic and English",
-        .arabicOnly: "Arabic only",
-        .englishOnly: "English only",
-    ]
-}
-
-extension RefreshInterval: AppEnum {
-    static let typeDisplayRepresentation: TypeDisplayRepresentation = "New verse"
-
-    static let caseDisplayRepresentations: [RefreshInterval: DisplayRepresentation] = [
-        .hourly: "Every hour",
-        .every6Hours: "Every 6 hours",
-        .daily: "Every day",
-        .every3Days: "Every 3 days",
-    ]
-}
+// Widget configuration parameters are limited to primitive types (Bool/String)
+// on purpose: AppEnum parameters decode by fetching type metadata from linkd,
+// and linkd rejects clients whose code signature has no Team ID
+// ("Rejecting invalid client due to requiresValidatedBundle"). This build is
+// ad-hoc signed, so enum parameters silently fall back to their defaults while
+// primitives decode fine. See README "Why the options are toggles".
 
 // Interactive widget button: advances to another verse immediately by bumping
 // a stored offset that the provider adds to the schedule-based index.
@@ -39,13 +21,33 @@ struct NextVerseIntent: AppIntent {
     }
 }
 
+struct IntervalOptionsProvider: DynamicOptionsProvider {
+    func results() async throws -> [String] {
+        trace("IntervalOptionsProvider queried")
+        return RefreshInterval.optionTitles
+    }
+}
+
 struct AyahConfigIntent: WidgetConfigurationIntent {
     static let title: LocalizedStringResource = "Ayah Options"
-    static let description = IntentDescription("Choose how the verse is shown and how often it changes.")
+    static let description = IntentDescription("Choose what is shown and how often the verse changes.")
 
-    @Parameter(title: "Show", default: .both)
-    var mode: DisplayMode
+    @Parameter(title: "Arabic text", default: true)
+    var showArabic: Bool
 
-    @Parameter(title: "New verse", default: .daily)
-    var interval: RefreshInterval
+    @Parameter(title: "English translation", default: true)
+    var showEnglish: Bool
+
+    // Stored as a display string; also accepts the raw tokens ("daily", ...)
+    // that configurations saved by older builds carry under the same key.
+    @Parameter(title: "New verse", default: "Every day", optionsProvider: IntervalOptionsProvider())
+    var interval: String
+
+    var displayMode: DisplayMode {
+        DisplayMode(showArabic: showArabic, showEnglish: showEnglish)
+    }
+
+    var refreshInterval: RefreshInterval {
+        RefreshInterval(configuredValue: interval)
+    }
 }

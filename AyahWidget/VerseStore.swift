@@ -27,11 +27,44 @@ struct Verse: Codable, Equatable {
     }
 }
 
+enum DisplayMode: String {
+    case both
+    case arabicOnly
+    case englishOnly
+
+    init(showArabic: Bool, showEnglish: Bool) {
+        switch (showArabic, showEnglish) {
+        case (true, false): self = .arabicOnly
+        case (false, true): self = .englishOnly
+        default: self = .both  // both on, or both off (nothing to show is not useful)
+        }
+    }
+}
+
 enum RefreshInterval: String, CaseIterable {
     case hourly
     case every6Hours
     case daily
     case every3Days
+
+    static let titles: [(RefreshInterval, String)] = [
+        (.hourly, "Every hour"),
+        (.every6Hours, "Every 6 hours"),
+        (.daily, "Every day"),
+        (.every3Days, "Every 3 days"),
+    ]
+
+    static var optionTitles: [String] { titles.map(\.1) }
+
+    init(configuredValue: String) {
+        if let match = Self.titles.first(where: { $0.1 == configuredValue })?.0 {
+            self = match
+        } else if let match = RefreshInterval(rawValue: configuredValue) {
+            self = match  // legacy token from configs saved by the AppEnum build
+        } else {
+            self = .daily
+        }
+    }
 }
 
 enum VerseStore {
