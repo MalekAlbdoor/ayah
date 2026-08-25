@@ -233,7 +233,9 @@ final class VerseSelectionTests: XCTestCase {
         // String.count counts graphemes and would disagree on Uthmani text.
         // Arabic and English are capped separately; see the script for why.
         let arabicCap: [VerseTier: Int] = [.short: 250, .medium: 400, .long: 700]
-        let englishCap: [VerseTier: Int] = [.short: 300, .medium: 300, .long: 550]
+        // Keep in step with ENGLISH_CAPS in Scripts/fetch_verses.sh. The long
+        // cap is 800 so it does not bind before the 700 Arabic cap does.
+        let englishCap: [VerseTier: Int] = [.short: 300, .medium: 300, .long: 800]
         for verse in verses {
             XCTAssertLessThanOrEqual(
                 verse.arabic.unicodeScalars.count, arabicCap[verse.tier]!,
