@@ -2,363 +2,392 @@
 #   surah:ayah | theme | source
 #   surah:start-end | theme | source
 # Theme and source are optional; the reference alone is still a valid line.
-1:1-7
-2:2
-2:21
-2:42
-2:44
-2:45
-2:110
-2:112
-2:147
-2:148
-2:152
-2:153
-2:155-156
-2:163
-2:172
-2:186
-2:195
-2:201
-2:216
-2:222
-2:255
-2:256
-2:257
-2:263
-2:268
-2:269
-2:286
-3:8
-3:18
-3:26
-3:31
-3:92
-3:102
-3:104
-3:133
-3:134
-3:139
-3:147
-3:159
-3:160
-3:169
-3:173
-3:185
-3:190
-3:191
-3:194
-3:200
-4:1
-4:58
-4:79
-4:86
-4:110
-4:114
-4:124
-4:147
-5:8
-5:35
-5:39
-5:88
-5:90
-5:100
-6:17
-6:32
-6:59
-6:103
-6:160
-6:162
-7:23
-7:31
-7:55-56
-7:96
-7:180
-7:199
-7:200
-7:201
-7:204
-7:205
-8:2
-8:24
-8:29
-8:46
-8:61
-9:51
-9:104
-9:105
-9:119
-9:128
-9:129
-10:25
-10:26
-10:44
-10:57
-10:58
-10:62
-11:6
-11:90
-11:112
-11:114
-11:115
-11:123
-12:53
-12:86
-12:87
-12:101
-13:11
-13:22
-13:24
-13:28
-13:29
-14:7
-14:24
-14:40
-14:41
-15:9
-15:49
-15:98-99
-16:18
-16:32
-16:53
-16:90
-16:96
-16:97
-16:114
-16:125
-16:127
-16:128
-17:23
-17:24
-17:36
-17:37
-17:44
-17:53
-17:70
-17:80
-17:81
-17:82
-18:7
-18:10
-18:23-24
-18:30
-18:46
-18:110
-19:4
-19:65
-19:96
-20:14
-20:25-28
-20:43-44
-20:45-46
-20:82
-20:114
-20:124
-21:30
-21:83
-21:87-88
-21:105
-21:107
-22:32
-22:38
-22:77
-23:1-2
-23:96
-23:97-98
-23:118
-24:22
-24:35
-25:63-65
-25:64
-25:67
-25:72
-25:74
-26:78-80
-26:83
-26:88-89
-27:19
-27:62
-27:79
-27:88
-28:24
-28:56
-28:77
-28:83
-29:2
-29:45
-29:60
-29:69
-30:21
-30:22
-30:30
-30:41
-30:60
-31:12
-31:13-15
-31:17
-31:18
-31:19
-32:16
-32:17
-33:21
-33:41-42
-33:56
-33:70-71
-34:39
-35:2
-35:3
-35:5
-35:15
-36:40
-36:58
-36:60-61
-36:82
-36:83
-37:100
-37:180-182
-38:29
-39:36
-39:53
-39:54
-39:62
-40:19
-40:55
-40:60
-40:65
-41:30
-41:33
-41:34
-41:35
-41:46
-42:19
-42:25
-42:30
-42:40
-42:43
-43:67
-43:68
-44:38-39
-45:13
-46:13
-46:35
-47:7
-47:19
-48:4
-49:6
-49:10
-49:12
-49:13
-50:16
-50:37
-50:39
-51:15-18
-51:56
-51:58
-52:48
-53:39-41
-53:42-43
-54:17
-54:49
-54:54-55
-55:13
-55:26-27
-55:60
-55:78
-56:63-64
-56:74
-57:3
-57:23
-58:21
-59:18
-59:19
-59:21
-59:22
-60:5
-60:8
-61:2-3
-62:10
-63:9
-64:11
-64:15
-64:17
-65:3
-66:11
-67:1
-67:2
-67:13
-67:15
-68:4
-69:33-34
-70:22-23
-71:13-14
-72:18
-73:1-2
-73:8
-73:9
-74:1-3
-74:38
-75:22-23
-75:36
-76:3
-76:8-9
-76:25-26
-77:41-42
-78:6-7
-78:31-32
-79:34-35
-79:40-41
-80:24
-80:38-39
-81:29
-82:6
-82:13-14
-83:1-3
-84:6
-84:7-9
-84:19
-85:13-14
-85:21-22
-86:4
-87:1
-87:14-15
-87:16-17
-88:17-18
-88:21-22
-89:17-18
-89:27-30
-90:8-10
-91:7-8
-91:7-10
-92:5-7
-92:12-13
-93:1-2
-93:3-5
-93:6-8
-93:9-11
-94:1-3
-94:5-6
-94:7-8
-95:4
-95:5-6
-95:8
-96:1-3
-96:4-5
-97:1-3
-97:4-5
-98:5
-98:7
-99:4-5
-99:7-8
-100:6-8
-101:6-7
-102:1-2
-103:1-3
-104:1-2
-106:3-4
-107:1-3
-108:1-3
-109:1-6
-110:1-3
-112:1-4
-113:1-5
-114:1-6
+# Themes (closed vocabulary, enforced by testThemeVocabularyIsClosed):
+#   mercy hope patience reliance dua gratitude character knowledge
+#   justice tawhid accountability hereafter warning
+# Sources are keys defined in docs/verse-sources.md.
+1:1-7 | dua | al-fatiha
+2:2 | accountability | topical-index
+2:21 | dua | quranic-dua
+2:42 | character | topical-index
+2:44 | character | topical-index
+2:45 | dua | quranic-dua
+2:110 | character | topical-index
+2:112 | dua | quranic-dua
+2:147 | dua | quranic-dua
+2:148 | character | topical-index
+2:152 | gratitude | topical-index
+2:153 | patience | topical-index
+2:155-156 | dua | quranic-dua
+2:163 | mercy | topical-index
+2:172 | dua | quranic-dua
+2:177 | character | topical-index
+2:186 | character | topical-index
+2:195 | character | topical-index
+2:201 | dua | quranic-dua
+2:216 | character | topical-index
+2:222 | mercy | topical-index
+2:255 | tawhid | ayat-al-kursi
+2:256 | tawhid | topical-index
+2:257 | warning | topical-index
+2:261-262 | character | topical-index
+2:263 | mercy | topical-index
+2:268 | mercy | topical-index
+2:269 | knowledge | topical-index
+2:281 | accountability | topical-index
+2:285 | tawhid | khawatim-al-baqarah
+2:286 | dua | khawatim-al-baqarah
+3:8 | dua | quranic-dua
+3:14 | warning | topical-index
+3:18 | tawhid | topical-index
+3:26 | dua | quranic-dua
+3:31 | mercy | topical-index
+3:92 | character | topical-index
+3:102 | accountability | topical-index
+3:104 | justice | topical-index
+3:133-134 | mercy | topical-index
+3:134 | mercy | topical-index
+3:139 | character | topical-index
+3:147 | dua | quranic-dua
+3:159 | reliance | topical-index
+3:160 | character | topical-index
+3:169 | character | topical-index
+3:173 | reliance | topical-index
+3:185 | warning | topical-index
+3:190-191 | dua | quranic-dua
+3:191 | dua | quranic-dua
+3:194 | dua | quranic-dua
+3:200 | accountability | topical-index
+4:1 | dua | quranic-dua
+4:58 | tawhid | topical-index
+4:79 | justice | topical-index
+4:86 | character | topical-index
+4:110 | mercy | topical-index
+4:114 | character | topical-index
+4:124 | hereafter | topical-index
+4:147 | warning | topical-index
+5:8 | accountability | topical-index
+5:35 | accountability | topical-index
+5:39 | mercy | topical-index
+5:88 | accountability | topical-index
+5:90 | character | topical-index
+5:100 | accountability | topical-index
+6:17 | character | topical-index
+6:32 | hereafter | topical-index
+6:59 | tawhid | topical-index
+6:103 | tawhid | topical-index
+6:151 | justice | topical-index
+6:160 | hereafter | topical-index
+6:162 | tawhid | topical-index
+7:23 | dua | quranic-dua
+7:31 | character | topical-index
+7:55-56 | mercy | topical-index
+7:96 | character | topical-index
+7:180 | dua | quranic-dua
+7:199 | character | topical-index
+7:200 | tawhid | topical-index
+7:201 | accountability | topical-index
+7:204 | mercy | topical-index
+7:205 | character | topical-index
+8:2 | character | topical-index
+8:2-4 | reliance | topical-index
+8:24 | dua | quranic-dua
+8:29 | accountability | topical-index
+8:46 | patience | topical-index
+8:61 | reliance | topical-index
+9:51 | reliance | topical-index
+9:71 | character | topical-index
+9:104 | mercy | topical-index
+9:105 | justice | topical-index
+9:119 | accountability | topical-index
+9:128 | mercy | topical-index
+9:129 | tawhid | topical-index
+10:25 | character | topical-index
+10:26 | hereafter | topical-index
+10:44 | justice | topical-index
+10:57 | mercy | topical-index
+10:58 | mercy | topical-index
+10:62 | character | topical-index
+11:6 | character | topical-index
+11:90 | mercy | topical-index
+11:112 | dua | quranic-dua
+11:114 | character | topical-index
+11:115 | patience | topical-index
+11:123 | dua | quranic-dua
+12:53 | mercy | topical-index
+12:86 | dua | quranic-dua
+12:87 | hope | topical-index
+12:101 | dua | quranic-dua
+13:11 | character | topical-index
+13:22 | patience | topical-index
+13:24 | patience | topical-index
+13:28 | character | topical-index
+13:29 | character | topical-index
+14:7 | warning | topical-index
+14:24 | character | topical-index
+14:40 | dua | quranic-dua
+14:41 | dua | quranic-dua
+15:9 | character | topical-index
+15:49 | mercy | topical-index
+15:98-99 | character | topical-index
+16:18 | mercy | topical-index
+16:32 | hereafter | topical-index
+16:53 | character | topical-index
+16:90 | justice | topical-index
+16:96 | patience | topical-index
+16:97 | hereafter | topical-index
+16:114 | gratitude | topical-index
+16:125 | character | topical-index
+16:127 | patience | topical-index
+16:128 | character | topical-index
+17:23-24 | dua | quranic-dua
+17:24 | dua | quranic-dua
+17:36 | knowledge | topical-index
+17:37 | character | topical-index
+17:44 | mercy | topical-index
+17:53 | character | topical-index
+17:70 | character | topical-index
+17:80 | dua | quranic-dua
+17:81 | character | topical-index
+17:82 | mercy | topical-index
+18:7 | character | topical-index
+18:10 | dua | quranic-dua
+18:23-24 | character | topical-index
+18:30 | character | topical-index
+18:46 | character | topical-index
+18:110 | character | topical-index
+19:4 | dua | quranic-dua
+19:65 | tawhid | topical-index
+19:96 | mercy | topical-index
+20:14 | tawhid | topical-index
+20:25-28 | dua | quranic-dua
+20:43-44 | character | topical-index
+20:45-46 | dua | quranic-dua
+20:82 | mercy | topical-index
+20:114 | dua | quranic-dua
+20:124 | hereafter | topical-index
+21:30 | character | topical-index
+21:35 | accountability | topical-index
+21:83 | mercy | topical-index
+21:87-88 | tawhid | topical-index
+21:105 | hereafter | topical-index
+21:107 | mercy | topical-index
+22:32 | character | topical-index
+22:38 | character | topical-index
+22:77 | character | topical-index
+23:1-5 | character | topical-index
+23:57-61 | character | topical-index
+23:96 | character | topical-index
+23:97-98 | dua | quranic-dua
+23:115 | accountability | topical-index
+23:118 | dua | quranic-dua
+24:22 | mercy | topical-index
+24:35 | warning | topical-index
+25:63-65 | dua | furqan-servants
+25:64 | character | topical-index
+25:67-70 | warning | furqan-servants
+25:72 | character | topical-index
+25:74 | dua | furqan-servants
+26:78-80 | character | topical-index
+26:83 | dua | quranic-dua
+26:88-89 | dua | quranic-dua
+27:19 | dua | quranic-dua
+27:62 | character | topical-index
+27:79 | reliance | topical-index
+27:88 | character | topical-index
+28:24 | dua | quranic-dua
+28:56 | character | topical-index
+28:77 | hereafter | topical-index
+28:83 | hereafter | topical-index
+29:2-3 | character | topical-index
+29:45 | character | topical-index
+29:60 | character | topical-index
+29:64 | hereafter | topical-index
+29:69 | character | topical-index
+30:21 | mercy | topical-index
+30:22 | knowledge | topical-index
+30:30 | character | topical-index
+30:41 | character | topical-index
+30:60 | patience | topical-index
+31:12 | dua | luqman-counsel
+31:13-15 | gratitude | luqman-counsel
+31:16-19 | character | luqman-counsel
+31:17 | patience | topical-index
+31:18 | character | topical-index
+31:19 | character | topical-index
+31:33 | warning | topical-index
+32:15-16 | dua | quranic-dua
+32:16 | character | topical-index
+32:17 | hope | topical-index
+33:21 | character | topical-index
+33:35 | character | topical-index
+33:41-42 | character | topical-index
+33:56 | character | topical-index
+33:70-71 | accountability | topical-index
+34:39 | character | topical-index
+35:2 | mercy | topical-index
+35:3 | tawhid | topical-index
+35:5 | character | topical-index
+35:15 | character | topical-index
+36:40 | character | topical-index
+36:58 | mercy | topical-index
+36:60-61 | character | topical-index
+36:82 | character | topical-index
+36:83 | tawhid | topical-index
+37:100 | dua | quranic-dua
+37:180-182 | dua | quranic-dua
+38:29 | knowledge | topical-index
+39:36 | reliance | topical-index
+39:53 | mercy | topical-index
+39:54 | warning | topical-index
+39:62 | reliance | topical-index
+40:19 | character | topical-index
+40:55 | patience | topical-index
+40:60 | warning | topical-index
+40:65 | dua | quranic-dua
+41:30 | hereafter | topical-index
+41:33 | dua | quranic-dua
+41:34-35 | patience | topical-index
+41:35 | patience | topical-index
+41:46 | character | topical-index
+42:19 | character | topical-index
+42:25 | mercy | topical-index
+42:30 | mercy | topical-index
+42:36-37 | reliance | topical-index
+42:40 | mercy | topical-index
+42:43 | patience | topical-index
+43:67 | character | topical-index
+43:68 | character | topical-index
+44:38-39 | character | topical-index
+45:13 | character | topical-index
+45:22 | accountability | topical-index
+46:13 | character | topical-index
+46:35 | patience | topical-index
+47:7 | character | topical-index
+47:19 | tawhid | topical-index
+47:36 | hereafter | topical-index
+48:4 | dua | quranic-dua
+49:6 | character | topical-index
+49:10 | accountability | topical-index
+49:11-12 | character | hujurat-akhlaq
+49:12 | accountability | topical-index
+49:13 | character | hujurat-akhlaq
+50:16 | character | topical-index
+50:37 | character | topical-index
+50:39 | patience | topical-index
+51:15-18 | mercy | topical-index
+51:56 | tawhid | topical-index
+51:58 | character | topical-index
+52:48 | dua | quranic-dua
+53:39-41 | accountability | topical-index
+53:42-43 | character | topical-index
+54:17 | character | topical-index
+54:49 | character | topical-index
+54:54-55 | character | topical-index
+55:13 | character | topical-index
+55:26-27 | dua | quranic-dua
+55:60 | character | topical-index
+55:78 | dua | quranic-dua
+56:63-64 | character | topical-index
+56:74 | dua | quranic-dua
+57:3 | character | topical-index
+57:20 | hereafter | topical-index
+57:23 | hope | topical-index
+58:21 | character | topical-index
+59:18 | accountability | topical-index
+59:19 | character | topical-index
+59:21 | character | topical-index
+59:22-24 | tawhid | topical-index
+60:5 | dua | quranic-dua
+60:8 | justice | topical-index
+61:2-3 | character | topical-index
+62:10 | character | topical-index
+63:9 | character | topical-index
+64:11 | character | topical-index
+64:15 | character | topical-index
+64:17 | mercy | topical-index
+65:2-3 | reliance | topical-index
+65:3 | reliance | topical-index
+66:11 | dua | quranic-dua
+67:1 | character | topical-index
+67:2 | mercy | topical-index
+67:13 | character | topical-index
+67:15 | character | topical-index
+68:4 | character | topical-index
+69:33-34 | character | topical-index
+70:22-23 | character | topical-index
+71:13-14 | dua | quranic-dua
+72:18 | character | topical-index
+73:1-2 | character | topical-index
+73:8 | character | topical-index
+73:9 | tawhid | topical-index
+74:1-3 | character | topical-index
+74:38 | accountability | topical-index
+75:22-23 | character | topical-index
+75:36 | character | topical-index
+76:3 | gratitude | topical-index
+76:8-9 | gratitude | topical-index
+76:25-26 | character | topical-index
+77:41-42 | character | topical-index
+78:6-7 | character | topical-index
+78:31-32 | character | topical-index
+79:34-35 | character | topical-index
+79:40-41 | hereafter | topical-index
+80:24 | character | topical-index
+80:38-39 | character | topical-index
+81:29 | tawhid | topical-index
+82:6 | dua | quranic-dua
+82:13-14 | warning | topical-index
+83:1-3 | accountability | topical-index
+84:6 | character | topical-index
+84:7-9 | accountability | topical-index
+84:19 | character | topical-index
+85:13-14 | mercy | topical-index
+85:21-22 | character | topical-index
+86:4 | reliance | topical-index
+87:1 | dua | quranic-dua
+87:14-15 | character | topical-index
+87:16-17 | hereafter | topical-index
+88:17-18 | character | topical-index
+88:21-22 | character | topical-index
+89:17-18 | character | topical-index
+89:27-30 | dua | quranic-dua
+90:8-10 | character | topical-index
+91:7-8 | character | topical-index
+91:7-10 | character | topical-index
+92:5-7 | hope | topical-index
+92:5-10 | accountability | topical-index
+92:12-13 | hereafter | topical-index
+93:1-2 | character | topical-index
+93:3-5 | hereafter | topical-index
+93:6-8 | character | topical-index
+93:9-11 | dua | quranic-dua
+94:1-3 | accountability | topical-index
+94:5-6 | hope | topical-index
+94:7-8 | character | topical-index
+95:4 | character | topical-index
+95:5-6 | character | topical-index
+95:8 | character | topical-index
+96:1-3 | character | topical-index
+96:4-5 | knowledge | topical-index
+97:1-3 | character | topical-index
+97:4-5 | character | topical-index
+98:5 | tawhid | topical-index
+98:7 | character | topical-index
+99:4-5 | character | topical-index
+99:6-8 | accountability | topical-index
+99:7-8 | accountability | topical-index
+100:6-8 | justice | topical-index
+101:6-7 | character | topical-index
+102:1-2 | character | topical-index
+103:1-3 | patience | topical-index
+104:1-2 | character | topical-index
+104:1-3 | warning | topical-index
+106:3-4 | character | topical-index
+107:1-3 | accountability | topical-index
+108:1-3 | character | topical-index
+109:1-6 | character | topical-index
+110:1-3 | mercy | topical-index
+112:1-4 | hereafter | muawwidhatayn
+113:1-5 | dua | muawwidhatayn
+114:1-6 | dua | muawwidhatayn

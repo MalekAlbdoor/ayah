@@ -186,6 +186,41 @@ final class VerseSelectionTests: XCTestCase {
         XCTAssertFalse(long.showsEnglish(sizeClass: .large, mode: .arabicOnly))
     }
 
+    // MARK: - Curation invariants
+
+    func testEveryVerseIsThemedAndSourced() {
+        for verse in verses {
+            XCTAssertFalse(verse.theme?.isEmpty ?? true, "\(verse.reference) has no theme")
+            XCTAssertFalse(verse.source?.isEmpty ?? true, "\(verse.reference) has no source")
+        }
+    }
+
+    func testThemeVocabularyIsClosed() {
+        // A closed vocabulary is what makes the balance check meaningful; a
+        // typo would otherwise quietly create a new one-entry theme.
+        let allowed: Set<String> = [
+            "mercy", "hope", "patience", "reliance", "dua", "gratitude",
+            "character", "knowledge", "justice", "tawhid", "accountability",
+            "hereafter", "warning",
+        ]
+        for verse in verses {
+            XCTAssertTrue(allowed.contains(verse.theme ?? ""),
+                          "\(verse.reference) has an unknown theme: \(verse.theme ?? "nil")")
+        }
+    }
+
+    func testBalanceIsComfortWeighted() {
+        // The set is deliberately comfort-weighted: it exists to be read cold
+        // on a desktop, not to admonish. It measured 15% sober when curated.
+        // The band is wide because its job is to catch drift into either a
+        // pure comfort feed or a warning feed, not to police a ratio.
+        let sober: Set<String> = ["accountability", "hereafter", "warning"]
+        let soberCount = verses.filter { sober.contains($0.theme ?? "") }.count
+        let share = Double(soberCount) / Double(verses.count)
+        XCTAssertGreaterThan(share, 0.10, "the set has become a comfort feed")
+        XCTAssertLessThan(share, 0.45, "the set leans too heavily on warning")
+    }
+
     func testSelectionIsDeterministic() {
         let date = Date(timeIntervalSince1970: 1_790_000_000)
         let first = VerseStore.verse(for: date, in: verses)
