@@ -27,7 +27,7 @@ Ayah is not notarized by Apple. Notarizing requires a paid Apple Developer membe
 Clearing a security check on your behalf is not something to wave through, so here is exactly what you are trusting:
 
 - **Every line of source is in this repository**, and the app is built from it with `xcodebuild`. Nothing is minified or obfuscated.
-- **It cannot reach the network.** Neither the app nor the widget requests the network entitlement, so the sandbox denies outbound connections at the OS level, not by promise. All 365 verses are bundled offline in `AyahWidget/Verses.json`.
+- **It cannot reach the network.** Neither the app nor the widget requests the network entitlement, so the sandbox denies outbound connections at the OS level, not by promise. All 385 verses are bundled offline in `AyahWidget/Verses.json`.
 - **Both targets are sandboxed** (`com.apple.security.app-sandbox`), so they cannot read your files or your other apps' data.
 - **It collects nothing.** There is no analytics, no telemetry, and no account.
 - The only thing it opens is a `quran.com` link in your default browser, when you click the widget.
@@ -48,6 +48,8 @@ There is a refresh button in the corner of the widget to jump to another verse i
 
 ## How it works
 
+- Every entry is chosen to read correctly on its own. A verse whose subject or addressee lives in the surrounding story is either widened until the thought closes or left out, so the widget never drops you into the middle of a narrative. Each one carries a theme and a cited basis, recorded in [docs/verse-sources.md](docs/verse-sources.md).
+- The set leans toward mercy, patience, reliance, and character, with a real but smaller presence of accountability and the hereafter. A test enforces that balance so it cannot quietly drift either way.
 - Verses rotate deterministically by date, so every Mac shows the same verse on the same day at the same widget size. The order is a fixed shuffle rather than mushaf order, so consecutive days do not all come from the same surah.
 - Widget size changes which verses can appear, not just the layout. Each verse is measured when the data is built and filed into a length tier; a small widget draws only from the short tier, medium adds the next, and large draws from all three. So a small and a large widget on the same desktop can show different verses on the same day, and each size cycles through its own pool before repeating.
 - The verse changes at local midnight, or on the interval you choose.

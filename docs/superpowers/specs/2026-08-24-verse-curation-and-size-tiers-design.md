@@ -231,10 +231,25 @@ tier-0 cap enough to retain them at the cost of legibility elsewhere; or grant a
 named exemption list that stays in tier 0 regardless of length. This is resolved
 during calibration, when the rendering evidence is in hand.
 
-**Phase 2, content.** Audit the 365 against the selection policy, widen or drop
-the fragments, then add the long-tier passages that only become possible once
-the mechanism exists. Every add and drop is reviewed verse by verse before it
-ships.
+**Phase 2, content. Delivered 2026-08-24.** The audit flagged 98 of 365 entries;
+86 were false positives. Three were dropped, seven widened to where the thought
+closes, and two pairs merged that had split a single sentence. Nine further
+single ayat were widened into their natural units and thirteen multi-ayah
+passages added. Twelve sober-reflective entries brought the balance from the 9%
+the set had drifted to up to 15%.
+
+Final state: 385 entries, 346 / 12 / 27 across tiers 0 / 1 / 2,
+pools of 346 / 358 / 385 for small / medium / large, and 58
+entries (15%) themed accountability, hereafter, or warning.
+
+One correction to this spec's own framing: a long-tier entry holds roughly two
+to four ayat, not a page. Luqman's full counsel (31:12-19) runs to 1229 scalars
+and exceeds every cap, so it ships as three entries. The closing ayat of
+al-Baqarah do not fit as a pair either.
+
+The plan called for verse-by-verse review before shipping. Malek instead
+directed the work to proceed on the agent's judgment; every decision is
+recorded in `docs/verse-triage.md` and is reversible by reverting the commit.
 
 Phase 1 is safe to ship alone. Phase 2 changes what users read and does not
 ship without that review.
