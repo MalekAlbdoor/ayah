@@ -930,15 +930,6 @@
     },
     {
       "surah": 12,
-      "ayahStart": 92,
-      "ayahEnd": 92,
-      "surahName": "Yusuf",
-      "arabic": "قَالَ لَا تَثْرِيبَ عَلَيْكُمُ ٱلْيَوْمَ ۖ يَغْفِرُ ٱللَّهُ لَكُمْ ۖ وَهُوَ أَرْحَمُ ٱلرَّٰحِمِينَ ٩٢",
-      "english": "He said, \"No blame will there be upon you today. Allah will forgive you; and He is the most merciful of the merciful.\"",
-      "tier": 0
-    },
-    {
-      "surah": 12,
       "ayahStart": 101,
       "ayahEnd": 101,
       "surahName": "Yusuf",
@@ -1335,20 +1326,20 @@
     },
     {
       "surah": 20,
-      "ayahStart": 44,
+      "ayahStart": 43,
       "ayahEnd": 44,
       "surahName": "Taa-Haa",
-      "arabic": "فَقُولَا لَهُۥ قَوْلًۭا لَّيِّنًۭا لَّعَلَّهُۥ يَتَذَكَّرُ أَوْ يَخْشَىٰ ٤٤",
-      "english": "And speak to him with gentle speech that perhaps he may be reminded or fear [Allah].\"",
+      "arabic": "ٱذْهَبَآ إِلَىٰ فِرْعَوْنَ إِنَّهُۥ طَغَىٰ ٤٣ فَقُولَا لَهُۥ قَوْلًۭا لَّيِّنًۭا لَّعَلَّهُۥ يَتَذَكَّرُ أَوْ يَخْشَىٰ ٤٤",
+      "english": "Go, both of you, to Pharaoh. Indeed, he has transgressed. And speak to him with gentle speech that perhaps he may be reminded or fear [Allah].\"",
       "tier": 0
     },
     {
       "surah": 20,
-      "ayahStart": 46,
+      "ayahStart": 45,
       "ayahEnd": 46,
       "surahName": "Taa-Haa",
-      "arabic": "قَالَ لَا تَخَافَآ ۖ إِنَّنِى مَعَكُمَآ أَسْمَعُ وَأَرَىٰ ٤٦",
-      "english": "[Allah] said, \"Fear not. Indeed, I am with you both; I hear and I see.",
+      "arabic": "قَالَا رَبَّنَآ إِنَّنَا نَخَافُ أَن يَفْرُطَ عَلَيْنَآ أَوْ أَن يَطْغَىٰ ٤٥ قَالَ لَا تَخَافَآ ۖ إِنَّنِى مَعَكُمَآ أَسْمَعُ وَأَرَىٰ ٤٦",
+      "english": "They said, \"Our Lord, indeed we are afraid that he will hasten [punishment] against us or that he will transgress.\" [Allah] said, \"Fear not. Indeed, I am with you both; I hear and I see.",
       "tier": 0
     },
     {
@@ -1399,20 +1390,11 @@
     {
       "surah": 21,
       "ayahStart": 87,
-      "ayahEnd": 87,
-      "surahName": "Al-Anbiyaa",
-      "arabic": "وَذَا ٱلنُّونِ إِذ ذَّهَبَ مُغَٰضِبًۭا فَظَنَّ أَن لَّن نَّقْدِرَ عَلَيْهِ فَنَادَىٰ فِى ٱلظُّلُمَٰتِ أَن لَّآ إِلَٰهَ إِلَّآ أَنتَ سُبْحَٰنَكَ إِنِّى كُنتُ مِنَ ٱلظَّٰلِمِينَ ٨٧",
-      "english": "And [mention] the man of the fish, when he went off in anger and thought that We would not decree [anything] upon him. And he called out within the darknesses, \"There is no deity except You; exalted are You. Indeed, I have been of the wrongdoers.\"",
-      "tier": 0
-    },
-    {
-      "surah": 21,
-      "ayahStart": 88,
       "ayahEnd": 88,
       "surahName": "Al-Anbiyaa",
-      "arabic": "فَٱسْتَجَبْنَا لَهُۥ وَنَجَّيْنَٰهُ مِنَ ٱلْغَمِّ ۚ وَكَذَٰلِكَ نُۨجِى ٱلْمُؤْمِنِينَ ٨٨",
-      "english": "So We responded to him and saved him from the distress. And thus do We save the believers.",
-      "tier": 0
+      "arabic": "وَذَا ٱلنُّونِ إِذ ذَّهَبَ مُغَٰضِبًۭا فَظَنَّ أَن لَّن نَّقْدِرَ عَلَيْهِ فَنَادَىٰ فِى ٱلظُّلُمَٰتِ أَن لَّآ إِلَٰهَ إِلَّآ أَنتَ سُبْحَٰنَكَ إِنِّى كُنتُ مِنَ ٱلظَّٰلِمِينَ ٨٧ فَٱسْتَجَبْنَا لَهُۥ وَنَجَّيْنَٰهُ مِنَ ٱلْغَمِّ ۚ وَكَذَٰلِكَ نُۨجِى ٱلْمُؤْمِنِينَ ٨٨",
+      "english": "And [mention] the man of the fish, when he went off in anger and thought that We would not decree [anything] upon him. And he called out within the darknesses, \"There is no deity except You; exalted are You. Indeed, I have been of the wrongdoers.\" So We responded to him and saved him from the distress. And thus do We save the believers.",
+      "tier": 2
     },
     {
       "surah": 21,
@@ -1516,11 +1498,11 @@
     {
       "surah": 25,
       "ayahStart": 63,
-      "ayahEnd": 63,
+      "ayahEnd": 65,
       "surahName": "Al-Furqaan",
-      "arabic": "وَعِبَادُ ٱلرَّحْمَٰنِ ٱلَّذِينَ يَمْشُونَ عَلَى ٱلْأَرْضِ هَوْنًۭا وَإِذَا خَاطَبَهُمُ ٱلْجَٰهِلُونَ قَالُوا۟ سَلَٰمًۭا ٦٣",
-      "english": "And the servants of the Most Merciful are those who walk upon the earth easily, and when the ignorant address them [harshly], they say [words of] peace,",
-      "tier": 0
+      "arabic": "وَعِبَادُ ٱلرَّحْمَٰنِ ٱلَّذِينَ يَمْشُونَ عَلَى ٱلْأَرْضِ هَوْنًۭا وَإِذَا خَاطَبَهُمُ ٱلْجَٰهِلُونَ قَالُوا۟ سَلَٰمًۭا ٦٣ وَٱلَّذِينَ يَبِيتُونَ لِرَبِّهِمْ سُجَّدًۭا وَقِيَٰمًۭا ٦٤ وَٱلَّذِينَ يَقُولُونَ رَبَّنَا ٱصْرِفْ عَنَّا عَذَابَ جَهَنَّمَ ۖ إِنَّ عَذَابَهَا كَانَ غَرَامًا ٦٥",
+      "english": "And the servants of the Most Merciful are those who walk upon the earth easily, and when the ignorant address them [harshly], they say [words of] peace, And those who spend [part of] the night to their Lord prostrating and standing [in prayer] And those who say, \"Our Lord, avert from us the punishment of Hell. Indeed, its punishment is ever adhering;",
+      "tier": 2
     },
     {
       "surah": 25,
@@ -1561,19 +1543,10 @@
     {
       "surah": 26,
       "ayahStart": 78,
-      "ayahEnd": 79,
-      "surahName": "Ash-Shu'araa",
-      "arabic": "ٱلَّذِى خَلَقَنِى فَهُوَ يَهْدِينِ ٧٨ وَٱلَّذِى هُوَ يُطْعِمُنِى وَيَسْقِينِ ٧٩",
-      "english": "Who created me, and He [it is who] guides me. And it is He who feeds me and gives me drink.",
-      "tier": 0
-    },
-    {
-      "surah": 26,
-      "ayahStart": 80,
       "ayahEnd": 80,
       "surahName": "Ash-Shu'araa",
-      "arabic": "وَإِذَا مَرِضْتُ فَهُوَ يَشْفِينِ ٨٠",
-      "english": "And when I am ill, it is He who cures me",
+      "arabic": "ٱلَّذِى خَلَقَنِى فَهُوَ يَهْدِينِ ٧٨ وَٱلَّذِى هُوَ يُطْعِمُنِى وَيَسْقِينِ ٧٩ وَإِذَا مَرِضْتُ فَهُوَ يَشْفِينِ ٨٠",
+      "english": "Who created me, and He [it is who] guides me. And it is He who feeds me and gives me drink. And when I am ill, it is He who cures me",
       "tier": 0
     },
     {
@@ -1759,11 +1732,11 @@
     {
       "surah": 31,
       "ayahStart": 13,
-      "ayahEnd": 13,
+      "ayahEnd": 15,
       "surahName": "Luqman",
-      "arabic": "وَإِذْ قَالَ لُقْمَٰنُ لِٱبْنِهِۦ وَهُوَ يَعِظُهُۥ يَٰبُنَىَّ لَا تُشْرِكْ بِٱللَّهِ ۖ إِنَّ ٱلشِّرْكَ لَظُلْمٌ عَظِيمٌۭ ١٣",
-      "english": "And [mention, O Muhammad], when Luqman said to his son while he was instructing him, \"O my son, do not associate [anything] with Allah. Indeed, association [with him] is great injustice.\"",
-      "tier": 0
+      "arabic": "وَإِذْ قَالَ لُقْمَٰنُ لِٱبْنِهِۦ وَهُوَ يَعِظُهُۥ يَٰبُنَىَّ لَا تُشْرِكْ بِٱللَّهِ ۖ إِنَّ ٱلشِّرْكَ لَظُلْمٌ عَظِيمٌۭ ١٣ وَوَصَّيْنَا ٱلْإِنسَٰنَ بِوَٰلِدَيْهِ حَمَلَتْهُ أُمُّهُۥ وَهْنًا عَلَىٰ وَهْنٍۢ وَفِصَٰلُهُۥ فِى عَامَيْنِ أَنِ ٱشْكُرْ لِى وَلِوَٰلِدَيْكَ إِلَىَّ ٱلْمَصِيرُ ١٤ وَإِن جَٰهَدَاكَ عَلَىٰٓ أَن تُشْرِكَ بِى مَا لَيْسَ لَكَ بِهِۦ عِلْمٌۭ فَلَا تُطِعْهُمَا ۖ وَصَاحِبْهُمَا فِى ٱلدُّنْيَا مَعْرُوفًۭا ۖ وَٱتَّبِعْ سَبِيلَ مَنْ أَنَابَ إِلَىَّ ۚ ثُمَّ إِلَىَّ مَرْجِعُكُمْ فَأُنَبِّئُكُم بِمَا كُنتُمْ تَعْمَلُونَ ١٥",
+      "english": "And [mention, O Muhammad], when Luqman said to his son while he was instructing him, \"O my son, do not associate [anything] with Allah. Indeed, association [with him] is great injustice.\" And We have enjoined upon man [care] for his parents. His mother carried him, [increasing her] in weakness upon weakness, and his weaning is in two years. Be grateful to Me and to your parents; to Me is the [final] destination. But if they endeavor to make you associate with Me that of which you have no knowledge, do not obey them but accompany them in [this] world with appropriate kindness and follow the way of those who turn back to Me [in repentance]. Then to Me will be your return, and I will inform you about what you used to do.",
+      "tier": 2
     },
     {
       "surah": 31,
@@ -2271,11 +2244,11 @@
     },
     {
       "surah": 51,
-      "ayahStart": 17,
+      "ayahStart": 15,
       "ayahEnd": 18,
       "surahName": "Adh-Dhaariyat",
-      "arabic": "كَانُوا۟ قَلِيلًۭا مِّنَ ٱلَّيْلِ مَا يَهْجَعُونَ ١٧ وَبِٱلْأَسْحَارِ هُمْ يَسْتَغْفِرُونَ ١٨",
-      "english": "They used to sleep but little of the night, And in the hours before dawn they would ask forgiveness,",
+      "arabic": "إِنَّ ٱلْمُتَّقِينَ فِى جَنَّٰتٍۢ وَعُيُونٍ ١٥ ءَاخِذِينَ مَآ ءَاتَىٰهُمْ رَبُّهُمْ ۚ إِنَّهُمْ كَانُوا۟ قَبْلَ ذَٰلِكَ مُحْسِنِينَ ١٦ كَانُوا۟ قَلِيلًۭا مِّنَ ٱلَّيْلِ مَا يَهْجَعُونَ ١٧ وَبِٱلْأَسْحَارِ هُمْ يَسْتَغْفِرُونَ ١٨",
+      "english": "Indeed, the righteous will be among gardens and springs, Accepting what their Lord has given them. Indeed, they were before that doers of good. They used to sleep but little of the night, And in the hours before dawn they would ask forgiveness,",
       "tier": 0
     },
     {
@@ -2603,15 +2576,6 @@
       "tier": 0
     },
     {
-      "surah": 68,
-      "ayahStart": 52,
-      "ayahEnd": 52,
-      "surahName": "Al-Qalam",
-      "arabic": "وَمَا هُوَ إِلَّا ذِكْرٌۭ لِّلْعَٰلَمِينَ ٥٢",
-      "english": "But it is not except a reminder to the worlds.",
-      "tier": 0
-    },
-    {
       "surah": 69,
       "ayahStart": 33,
       "ayahEnd": 34,
@@ -2627,15 +2591,6 @@
       "surahName": "Al-Ma'aarij",
       "arabic": "إِلَّا ٱلْمُصَلِّينَ ٢٢ ٱلَّذِينَ هُمْ عَلَىٰ صَلَاتِهِمْ دَآئِمُونَ ٢٣",
       "english": "Except the observers of prayer - Those who are constant in their prayer",
-      "tier": 0
-    },
-    {
-      "surah": 71,
-      "ayahStart": 10,
-      "ayahEnd": 11,
-      "surahName": "Nooh",
-      "arabic": "فَقُلْتُ ٱسْتَغْفِرُوا۟ رَبَّكُمْ إِنَّهُۥ كَانَ غَفَّارًۭا ١٠ يُرْسِلِ ٱلسَّمَآءَ عَلَيْكُم مِّدْرَارًۭا ١١",
-      "english": "And said, 'Ask forgiveness of your Lord. Indeed, He is ever a Perpetual Forgiver. He will send [rain from] the sky upon you in [continuing] showers",
       "tier": 0
     },
     {
@@ -2982,11 +2937,11 @@
     },
     {
       "surah": 91,
-      "ayahStart": 9,
+      "ayahStart": 7,
       "ayahEnd": 10,
       "surahName": "Ash-Shams",
-      "arabic": "قَدْ أَفْلَحَ مَن زَكَّىٰهَا ٩ وَقَدْ خَابَ مَن دَسَّىٰهَا ١٠",
-      "english": "He has succeeded who purifies it, And he has failed who instills it [with corruption].",
+      "arabic": "وَنَفْسٍۢ وَمَا سَوَّىٰهَا ٧ فَأَلْهَمَهَا فُجُورَهَا وَتَقْوَىٰهَا ٨ قَدْ أَفْلَحَ مَن زَكَّىٰهَا ٩ وَقَدْ خَابَ مَن دَسَّىٰهَا ١٠",
+      "english": "And [by] the soul and He who proportioned it And inspired it [with discernment of] its wickedness and its righteousness, He has succeeded who purifies it, And he has failed who instills it [with corruption].",
       "tier": 0
     },
     {
@@ -3243,12 +3198,12 @@
     },
     {
       "surah": 109,
-      "ayahStart": 6,
+      "ayahStart": 1,
       "ayahEnd": 6,
       "surahName": "Al-Kaafiroon",
-      "arabic": "لَكُمْ دِينُكُمْ وَلِىَ دِينِ ٦",
-      "english": "For you is your religion, and for me is my religion.\"",
-      "tier": 0
+      "arabic": "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ قُلْ يَٰٓأَيُّهَا ٱلْكَٰفِرُونَ ١ لَآ أَعْبُدُ مَا تَعْبُدُونَ ٢ وَلَآ أَنتُمْ عَٰبِدُونَ مَآ أَعْبُدُ ٣ وَلَآ أَنَا۠ عَابِدٌۭ مَّا عَبَدتُّمْ ٤ وَلَآ أَنتُمْ عَٰبِدُونَ مَآ أَعْبُدُ ٥ لَكُمْ دِينُكُمْ وَلِىَ دِينِ ٦",
+      "english": "Say, \"O disbelievers, I do not worship what you worship. Nor are you worshippers of what I worship. Nor will I be a worshipper of what you worship. Nor will you be worshippers of what I worship. For you is your religion, and for me is my religion.\"",
+      "tier": 1
     },
     {
       "surah": 110,
