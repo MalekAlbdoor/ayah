@@ -1,0 +1,14 @@
+included:
+  - Ayah
+  - AyahWidget
+excluded:
+  - build
+  - dist
+disabled_rules:
+  - line_length
+  - todo
+  - trailing_whitespace
+  - trailing_comma
+identifier_name:
+  min_length: 1
+  excluded: [id, me, on, to, at, ok]
