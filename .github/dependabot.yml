@@ -1,0 +1,9 @@
+version: 2
+
+updates:
+  # The app has no external Swift packages, so the actions in ci.yml and release.yml
+  # are the only moving dependency here.
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
